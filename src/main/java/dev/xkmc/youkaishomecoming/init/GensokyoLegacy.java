@@ -91,6 +91,7 @@ public class GensokyoLegacy {
             TAB = REGISTRATE.buildModCreativeTab("youkais_homecoming", "Youkai's Homecoming",
                     e -> e.icon(YHItems.OOLONG_TEA_BAG::asStack));
         }
+        dev.xkmc.l2serial.serialization.custom_handler.Handlers.enableVanilla(net.minecraft.world.level.material.Fluid.class, net.minecraft.core.registries.BuiltInRegistries.FLUID);
         YHBlocks.register();
         GLDecoBlocks.register();
         GLItems.register();
@@ -135,11 +136,17 @@ public class GensokyoLegacy {
         }
 
         // Register condiments - removed soy sauce and mayonnaise as they should be used directly as items
-        // Only register large flasks which need fluid conversion
-
-        // Register large flasks
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SlipFluidWrapper(stack), YHItems.SOY_SAUCE_FLASK.get());
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SlipFluidWrapper(stack), YHItems.MAYONNAISE_FLASK.get());
+        // Large flask block-items (soy_sauce_flask / mayonnaise_flask) get their capability
+        // automatically via the YHDrink loop above and BottledDrinkSet wiring on the BlockItem.
+        // Soy sauce / mayonnaise flask block-items: register SlipFluidWrapper capability
+        if (YHItems.SOY_SAUCE_BOTTLE.set != null) {
+            event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SlipFluidWrapper(stack), YHItems.SOY_SAUCE_BOTTLE.set.bottle.get());
+        }
+        if (YHItems.MAYONNAISE.set != null) {
+            event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SlipFluidWrapper(stack), YHItems.MAYONNAISE.set.bottle.get());
+        }
+        // SAKE_BOTTLE is a SlipBottleItem and needs the wrapper too
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SlipFluidWrapper(stack), YHItems.SAKE_BOTTLE.get());
         // Register blood bottle as fluid source for fermentation tank
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new SakeFluidWrapper(stack), YHItems.BLOOD_BOTTLE.item.get());
 
@@ -168,6 +175,9 @@ public class GensokyoLegacy {
             dev.xkmc.youkaishomecoming.content.pot.table.item.TableItemManager.prepareData();
             if (net.neoforged.fml.ModList.get().isLoaded("terrablender")) {
                 dev.xkmc.youkaishomecoming.compat.terrablender.TerraBlenderCompat.registerBiomes();
+            }
+            if (net.neoforged.fml.ModList.get().isLoaded("thirst")) {
+                dev.xkmc.youkaishomecoming.compat.thirst.ThirstCompat.init();
             }
         });
     }

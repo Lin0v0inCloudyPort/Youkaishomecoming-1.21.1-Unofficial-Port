@@ -54,47 +54,29 @@ public class BucketBottleItem extends BlockItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("BucketBottleItem.finishUsingItem called - stack: {}, user: {}, isClientSide: {}", stack, user, level.isClientSide);
-
 		var other = stack.getCount() == 1 ? ItemStack.EMPTY : stack.split(stack.getCount() - 1);
 		var handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Handler: {}, instanceof SlipFluidWrapper: {}", handler, handler instanceof SlipFluidWrapper);
-
 		if (handler == null || !(handler instanceof SlipFluidWrapper slip)) return stack;
-		var fluid = slip.getFluid();
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Fluid before drain: {}", fluid);
 
-		// Apply food effects manually
 		var food = getFoodProperties(stack, user);
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Food properties: {}", food);
-
 		if (food != null && food != SlipBottleItem.NONE) {
-			// Apply nutrition and saturation
 			if (user instanceof Player player) {
 				player.getFoodData().eat(food.nutrition(), food.saturation());
-				dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Applied nutrition: {}, saturation: {}", food.nutrition(), food.saturation());
 			}
-			// Apply effects
 			if (!level.isClientSide) {
 				for (var effect : food.effects()) {
 					if (level.random.nextFloat() < effect.probability()) {
 						user.addEffect(new net.minecraft.world.effect.MobEffectInstance(effect.effect()));
-						dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Applied effect: {}", effect.effect());
 					}
 				}
 			}
 		}
 
-		// Drain fluid - this will automatically update the container
 		slip.getContainer().setCount(1);
-		var drained = slip.drain(50, IFluidHandler.FluidAction.EXECUTE);
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Drained: {}, fluid after drain: {}", drained, slip.getFluid());
-
+		slip.drain(50, IFluidHandler.FluidAction.EXECUTE);
 		var result = slip.getContainer();
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Container before return: {}, DC_FLUID: {}", result, result.get(dev.xkmc.youkaishomecoming.init.registrate.YHItems.DC_FLUID));
 
 		if (!other.isEmpty()) {
-			// stack.getOrCreateTag().putString("BottleMarker", "DISCARD"); // 1.21.1 uses DataComponents
 			if (user instanceof Player player) {
 				player.getInventory().placeItemBackInInventory(other);
 			} else {
@@ -102,16 +84,38 @@ public class BucketBottleItem extends BlockItem {
 			}
 			stack.setCount(0);
 		}
-		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Returning: {}", result);
 		return result;
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext level, List<Component> list, TooltipFlag flag) {
 		list.add(YHLangData.PLACE.get());
+		var fluid = SlipBottleItem.getFluid(stack);
+		if (!fluid.isEmpty()) {
+			int amount = fluid.getAmount();
+			if (amount % 50 == 0 && amount > 0 && amount < 1000) {
+				list.add(YHLangData.FLASK_USE.get(amount / 50, 20));
+			}
+		}
 		if (Configuration.FOOD_EFFECT_TOOLTIP.get())
 			YHFoodItem.getFoodEffects(stack, list);
 		super.appendHoverText(stack, level, list, flag);
+	}
+
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		var fluid = SlipBottleItem.getFluid(stack);
+		return !fluid.isEmpty() && fluid.getAmount() < 1000;
+	}
+
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return 13 * SlipBottleItem.getFluid(stack).getAmount() / 1000;
+	}
+
+	@Override
+	public int getBarColor(ItemStack stack) {
+		return 0xFFFFFF;
 	}
 
 	public @Nullable FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {

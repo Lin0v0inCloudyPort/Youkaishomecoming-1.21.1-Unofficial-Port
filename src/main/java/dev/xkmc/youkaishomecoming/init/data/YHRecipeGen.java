@@ -7,6 +7,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 //import dev.xkmc.fruitsdelight.init.food.FDFood;
 //import dev.xkmc.fruitsdelight.init.food.FruitType;
 import dev.xkmc.l2core.serial.recipe.ConditionalRecipeWrapper;
+import dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleIngredient;
 import dev.xkmc.youkaishomecoming.compat.food.FruitsDelightCompatFood;
 import dev.xkmc.youkaishomecoming.content.pot.base.BasePotOutput;
 import dev.xkmc.youkaishomecoming.content.pot.basin.SimpleBasinBuilder;
@@ -920,7 +921,7 @@ public class YHRecipeGen {
 
 		// cooking pots (small iron pot, short iron pot, stockpot)
 		{
-			var soy = YHItems.SOY_SAUCE_BOTTLE.item.get();
+			var soy = SlipBottleIngredient.of(YHItems.SOY_SAUCE_BOTTLE.source());
 
 			// Small iron pot (IRON_BOWL) recipes - 200 ticks
 			unlock(pvd, new dev.xkmc.youkaishomecoming.content.pot.cooking.core.UnorderedPotRecipeBuilder(YHBowl.HIGAN_SOUP, 200)::unlockedBy, YHBlocks.IRON_BOWL.asItem())

@@ -135,7 +135,8 @@ public abstract class YoukaiEntity extends DamageClampEntity implements SpellCir
 		super.addAdditionalSaveData(tag);
 		tag.putInt("Age", tickCount);
 		var cdc = new TagCodec(level().registryAccess());
-		tag.put("auto-serial", Objects.requireNonNull(cdc.toTag(new CompoundTag(), this)));
+		var auto = cdc.toTag(new CompoundTag(), this);
+		if (auto != null) tag.put("auto-serial", auto);
 		if (hasRestriction()) {
 			var data = cdc.valueToTag(RestrictData.class, new RestrictData(getRestrictCenter(), getRestrictRadius()));
 			if (data != null) tag.put("Restrict", data);
@@ -220,7 +221,7 @@ public abstract class YoukaiEntity extends DamageClampEntity implements SpellCir
 	}
 
 	protected List<AbstractYoukaiModule> createModules() {
-		return List.of(new HomeModule(this), new FeedModule(this), new TalkModule(this));
+		return List.of(new HomeModule(this), new TalkModule(this));
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import dev.xkmc.l2modularblock.core.BlockTemplates;
 import dev.xkmc.l2modularblock.tile_api.BlockContainer;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
+import dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleItem;
 import dev.xkmc.youkaishomecoming.content.pot.base.TimedRecipeBlockEntity;
 import dev.xkmc.youkaishomecoming.content.pot.cooking.soup.SoupHolder;
 import dev.xkmc.youkaishomecoming.content.pot.overlay.IHintableBlock;
@@ -86,23 +87,6 @@ public abstract class CookingBlockEntity extends TimedRecipeBlockEntity<PotCooki
 
 	public boolean tryAddItem(ItemStack stack, boolean simulate) {
 		if (level == null) return false;
-		// Convert fluid container to its content for recipe matching
-		ItemStack testStack = stack;
-		var fluidHandler = stack.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM);
-		boolean isFluidContainer = fluidHandler instanceof dev.xkmc.youkaishomecoming.content.item.fluid.SlipFluidWrapper
-				|| fluidHandler instanceof dev.xkmc.youkaishomecoming.content.item.fluid.SakeFluidWrapper;
-
-		if (isFluidContainer) {
-			testStack = dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleItem.getContentStack(stack);
-			if (!level.isClientSide()) {
-				dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Detected fluid container: {} -> content: {}", stack, testStack);
-			}
-			if (testStack.isEmpty()) return false;
-		} else {
-			if (!level.isClientSide()) {
-				dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Not a fluid container: {}", stack);
-			}
-		}
 		List<ItemStack> list = new ArrayList<>();
 		boolean empty = false;
 		for (var e : items.getAsList()) {
@@ -110,20 +94,15 @@ public abstract class CookingBlockEntity extends TimedRecipeBlockEntity<PotCooki
 			else empty = true;
 		}
 		if (!empty) return false;
-		list.add(testStack.copyWithCount(1));
+		list.add(stack.copyWithCount(1));
 		var inv = new CookingInv(container(), list, false);
-		var opt = level.getRecipeManager().getRecipeFor(YHBlocks.COOKING_RT.get(), inv, level);
-		if (opt.isEmpty()) {
-			if (!level.isClientSide()) {
-				dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("No recipe found for: {} (original: {})", testStack, stack);
-			}
+		var cookingOpt = level.getRecipeManager().getRecipeFor(YHBlocks.COOKING_RT.get(), inv, level);
+		boolean matchesSoup = !level.getRecipeManager().getRecipesFor(YHBlocks.SOUP_RT.get(), inv, level).isEmpty();
+		if (cookingOpt.isEmpty() && !matchesSoup) {
 			return false;
 		}
 		if (!simulate) {
-			if (!level.isClientSide()) {
-				dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("Adding item to pot: {} (isFluidContainer: {})", testStack, isFluidContainer);
-			}
-			items.addItem(testStack.copyWithCount(1));
+			items.addItem(stack.copyWithCount(1));
 		}
 		return true;
 	}
@@ -181,8 +160,7 @@ public abstract class CookingBlockEntity extends TimedRecipeBlockEntity<PotCooki
 		SimpleContainer copy = new SimpleContainer(items.getContainerSize());
 		for (int i = 0; i < items.getContainerSize(); i++) {
 			var stack = items.getItem(i);
-			// TODO: SlipBottleItem support disabled
-			if (stack.isEmpty() || stack.hasCraftingRemainingItem() /* || SlipBottleItem.isSlipContainer(stack) */) continue;
+			if (stack.isEmpty() || stack.hasCraftingRemainingItem() || SlipBottleItem.isSlipContainer(stack)) continue;
 			copy.addItem(stack.copy());
 		}
 		return List.of(copy);
@@ -243,6 +221,17 @@ public abstract class CookingBlockEntity extends TimedRecipeBlockEntity<PotCooki
 		for (var e : recipes) {
 			ans.addAll(e.value().getHints(level, cont));
 		}
+		// DIAG: log hint generation
+		StringBuilder sb = new StringBuilder("[CookingBE.getHints] inv=[");
+		for (int i = 0; i < cont.size(); i++) {
+			var s = cont.getItem(i);
+			if (!s.isEmpty()) sb.append(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(s.getItem())).append(",");
+		}
+		sb.append("] recipes=").append(recipes.size()).append(" hints=").append(ans.size());
+		for (var e : recipes) {
+			sb.append(" recipe=").append(e.id());
+		}
+		dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info(sb.toString());
 		return ans;
 	}
 

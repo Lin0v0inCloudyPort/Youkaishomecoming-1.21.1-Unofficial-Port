@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = GensokyoLegacy.MODID)
 public class ClientEventHandlers {
@@ -22,6 +23,19 @@ public class ClientEventHandlers {
 		oTilt = tilt;
 		float lv = drunkLevel();
 		tilt = Mth.lerp(0.03f, tilt, lv);
+	}
+
+	@SubscribeEvent
+	public static void onInput(MovementInputUpdateEvent event) {
+		if (oTilt > 0.01) {
+			float t = oTilt;
+			float time = event.getEntity().tickCount;
+			float movement = t * t * Mth.sin((float) (time / 60 * Math.PI * 2));
+			float opt = Minecraft.getInstance().options.fovEffectScale().get().floatValue();
+			float scale = Math.abs(event.getInput().forwardImpulse) + 0.3f;
+			float val = event.getInput().leftImpulse + (1.5f - opt) * movement * scale * 2;
+			event.getInput().leftImpulse = Mth.clamp(val, -1, 1);
+		}
 	}
 
 	private static float drunkLevel() {
@@ -38,7 +52,9 @@ public class ClientEventHandlers {
 		float t = Mth.lerp(pTick, oTilt, tilt);
 		if (t < 0.01) return;
 		float time = pTick + player.tickCount;
-		pose.mulPose(Axis.ZP.rotationDegrees(t * t * 45 * Mth.sin((float) (time / 60 * Math.PI * 2))));
+		float angle = t * t * 45 * Mth.sin((float) (time / 60 * Math.PI * 2));
+		float opt = Minecraft.getInstance().options.fovEffectScale().get().floatValue();
+		pose.mulPose(Axis.ZP.rotationDegrees(angle * opt));
 	}
 
 }

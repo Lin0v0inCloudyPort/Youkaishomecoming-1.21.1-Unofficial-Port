@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"item": "youkaishomecoming:sake_bottle"},
+    {"item": "youkaishomecoming:soy_sauce_bottle"},
+    {"item": "youkaishomecoming:soy_sauce_bottle"},
+    {"item": "youkaishomecoming:soy_sauce_bottle"},
+    {"item": "youkaishomecoming:soy_sauce_bottle"}
+  ],
+  "result": {
+    "count": 1,
+    "id": "youkaishomecoming:soy_sauce_flask"
+  }
+}

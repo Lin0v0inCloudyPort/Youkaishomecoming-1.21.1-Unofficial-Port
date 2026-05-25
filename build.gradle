@@ -91,7 +91,6 @@ sourceSets.main.java {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    implementation files('libs/danmaku_api-3.0.5+1.jar')
     compileOnly "com.github.glitchfiend:TerraBlender-neoforge:${minecraft_version}-4.1.0.3"
 }
 
@@ -240,4 +239,6 @@ dependencies {
     implementation "curse.maven:farmers-delight-398521:5566383"
     implementation "dev.xkmc:cuisinedelight:1.2.3-slim"
     //implementation "dev.xkmc:fruitsdelight:1.2.1+3"
+
+    compileOnly fileTree(dir: 'libs', include: ['ThirstWasTaken-*.jar'])
 }

@@ -25,6 +25,8 @@ public class ReimuPart<T> extends Ticker<T> {
 	private DanmakuItems.Bullet bullet;
 	@SerialField
 	private DyeColor color;
+	@SerialField
+	private float damageMultiplier = 1f;
 
 	public ReimuPart() {
 		setRad(8, 6, 20, 20, 1);
@@ -52,6 +54,11 @@ public class ReimuPart<T> extends Ticker<T> {
 	public ReimuPart<T> setProp(DanmakuItems.Bullet bullet, DyeColor color) {
 		this.bullet = bullet;
 		this.color = color;
+		return this;
+	}
+
+	public ReimuPart<T> setDamageMultiplier(float multiplier) {
+		this.damageMultiplier = multiplier;
 		return this;
 	}
 
@@ -88,6 +95,7 @@ public class ReimuPart<T> extends Ticker<T> {
 				var front = o0.rotateDegrees(360.0 / n * i);
 				var vec = front.scale(acc * t0);
 				var e = holder.prepareDanmaku(t0, vec, bullet, DyeColor.LIGHT_GRAY);
+				e.damage *= damageMultiplier;
 				e.mover = new RectMover(pos, vec, front.scale(-acc));
 				holder.shoot(e);
 			}
@@ -102,6 +110,7 @@ public class ReimuPart<T> extends Ticker<T> {
 				var f1 = target1.subtract(p0).normalize();
 				var vec = f1.scale(acc * t1);
 				var e = holder.prepareDanmaku(t1, vec, bullet, DyeColor.PURPLE);
+				e.damage *= damageMultiplier;
 				e.setPos(p0);
 				e.mover = new RectMover(p0, vec, f1.scale(-acc));
 				holder.shoot(e);
@@ -118,6 +127,7 @@ public class ReimuPart<T> extends Ticker<T> {
 				var vec = f2.scale(termSpeed);
 				int t = t2 + r.nextInt(dt);
 				var e = holder.prepareDanmaku(t, vec, bullet, color);
+				e.damage *= damageMultiplier;
 				e.setPos(p1);
 				e.mover = new RectMover(p1, vec, Vec3.ZERO);
 				holder.shoot(e);

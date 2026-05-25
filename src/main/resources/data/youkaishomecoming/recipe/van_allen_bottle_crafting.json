@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"item": "youkaishomecoming:sake_bottle"},
+    {"item": "youkaishomecoming:van_allen"},
+    {"item": "youkaishomecoming:van_allen"},
+    {"item": "youkaishomecoming:van_allen"},
+    {"item": "youkaishomecoming:van_allen"}
+  ],
+  "result": {
+    "count": 1,
+    "id": "youkaishomecoming:van_allen_bottle"
+  }
+}

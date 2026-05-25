@@ -10,7 +10,7 @@ import dev.xkmc.youkaishomecoming.util.RayTraceUtil;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class MarisaItemSpell extends ItemSpell {
 
 	@Override
-	public void start(Player player, @Nullable LivingEntity target) {
+	public void start(LivingEntity player, @Nullable LivingEntity target) {
 		super.start(player, target);
 		addTicker(new MasterSpark(player));
 	}
@@ -31,13 +31,13 @@ public class MarisaItemSpell extends ItemSpell {
 		private Vec3 target;
 
 		@Nullable
-		private Player player;
+		private LivingEntity player;
 
 		public MasterSpark() {
 
 		}
 
-		public MasterSpark(Player player) {
+		public MasterSpark(LivingEntity player) {
 			this.player = player;
 		}
 

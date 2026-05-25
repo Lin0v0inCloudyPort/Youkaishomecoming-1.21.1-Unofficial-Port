@@ -51,8 +51,8 @@ public class DonationBoxBlockEntity extends LocatedBlockEntity implements IDebug
 
 		int value = 0;
 		boolean isSummonItem = false;
-		if (stack.is(Items.EMERALD)) { value = 3; isSummonItem = true; }
-		else if (stack.is(Items.GOLD_INGOT)) { value = 9; isSummonItem = true; }
+		if (stack.is(Items.EMERALD)) { value = 5; isSummonItem = true; }
+		else if (stack.is(Items.GOLD_INGOT)) { value = 5; isSummonItem = true; }
 		else if (stack.is(Items.GOLD_NUGGET)) value = 1;
 		else if (stack.is(Items.GOLD_BLOCK)) value = 81;
 		if (value == 0) return;

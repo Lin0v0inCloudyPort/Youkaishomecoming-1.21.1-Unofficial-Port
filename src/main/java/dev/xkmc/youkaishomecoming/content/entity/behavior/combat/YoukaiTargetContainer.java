@@ -47,6 +47,13 @@ public class YoukaiTargetContainer {
 	}
 
 	public boolean isValidTarget(LivingEntity e) {
+		if (e instanceof net.minecraft.server.level.ServerPlayer sp) {
+			var mode = sp.gameMode.getGameModeForPlayer();
+			if (mode == net.minecraft.world.level.GameType.CREATIVE
+					|| mode == net.minecraft.world.level.GameType.SPECTATOR) {
+				return false;
+			}
+		}
 		return !youkai.invalidTarget(e) && e.canBeSeenAsEnemy() && !e.getType().is(GLTagGen.YOUKAI_IGNORE);
 	}
 
@@ -81,6 +88,10 @@ public class YoukaiTargetContainer {
 			if (sl.getEntity(id) instanceof LivingEntity le && isValidTarget(le))
 				return le;
 		return null;
+	}
+
+	public void removePlayer(UUID uuid) {
+		list.remove(uuid);
 	}
 
 	public List<LivingEntity> getTargets() {

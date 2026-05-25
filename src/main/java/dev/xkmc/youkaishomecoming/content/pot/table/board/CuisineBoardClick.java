@@ -2,6 +2,7 @@ package dev.xkmc.youkaishomecoming.content.pot.table.board;
 
 import dev.xkmc.l2modularblock.mult.UseItemOnBlockMethod;
 import dev.xkmc.l2modularblock.mult.UseWithoutItemBlockMethod;
+import dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleItem;
 import dev.xkmc.youkaishomecoming.content.pot.table.item.SearHelper;
 import dev.xkmc.youkaishomecoming.init.data.YHTagGen;
 import dev.xkmc.youkaishomecoming.init.registrate.YHCriteriaTriggers;
@@ -70,13 +71,12 @@ public class CuisineBoardClick implements UseItemOnBlockMethod, UseWithoutItemBl
 							return ItemInteractionResult.SUCCESS;
 						}
 					}
-					// TODO: SlipBottleItem disabled - needs NeoForge 1.21.1 capability rewrite
-					// if (SlipBottleItem.isSlipContainer(stack)) {
-					//     var toConsume = stack.split(1);
-					//     player.setItemInHand(hand, SlipBottleItem.drain(toConsume));
-					//     player.getInventory().placeItemBackInInventory(stack);
-					//     return ItemInteractionResult.SUCCESS;
-					// }
+					if (SlipBottleItem.isSlipContainer(stack)) {
+					    var toConsume = stack.split(1);
+					    player.setItemInHand(hand, SlipBottleItem.drain(toConsume));
+					    player.getInventory().placeItemBackInInventory(stack);
+					    return ItemInteractionResult.SUCCESS;
+					}
 					boolean withCont = stack.is(YHTagGen.PLACE_WITH_CONTAINER);
 					ItemStack cont = stack.getCraftingRemainingItem();
 					stack.shrink(cost);

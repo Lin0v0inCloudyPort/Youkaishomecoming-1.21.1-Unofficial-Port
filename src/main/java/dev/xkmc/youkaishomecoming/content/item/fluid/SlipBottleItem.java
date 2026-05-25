@@ -43,14 +43,12 @@ public class SlipBottleItem extends YHDrinkItem {
 		if (handler instanceof SlipFluidWrapper slip) {
 			var fluidStack = slip.getFluid();
 			var fluidHandler = YHFluidHandler.of(fluidStack);
-			dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("SlipFluidWrapper: fluid={}, handler={}", fluidStack, fluidHandler);
 			if (fluidHandler instanceof IYHFluidItem fluid) {
 				return fluid.asStack(fluidStack.getAmount() / 50);
 			}
 		} else if (handler instanceof SakeFluidWrapper sake) {
 			var fluidStack = sake.getFluid();
 			var fluidHandler = YHFluidHandler.of(fluidStack);
-			dev.xkmc.youkaishomecoming.init.GensokyoLegacy.LOGGER.info("SakeFluidWrapper: fluid={}, handler={}", fluidStack, fluidHandler);
 			if (fluidHandler instanceof IYHFluidItem fluid) {
 				return fluid.asStack(1);
 			}

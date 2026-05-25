@@ -8,11 +8,14 @@
 		"AddLootTableModifierAccessor",
 		"CookingPotRecipeAccessor",
 		"FrogAttackablesSensorMixin",
+		"ItemSpellAccessor",
 		"LivingEntityMixin",
 		"RandomizableContainerBlockEntityMixin",
-		"ShootTongueMixin"
+		"ShootTongueMixin",
+		"SpellItemAccessor"
 	],
 	"client": [
+		"effect.GameRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -10,7 +10,7 @@ import dev.xkmc.youkaishomecoming.content.spell.mover.AttachedMover;
 import dev.xkmc.youkaishomecoming.util.RayTraceUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class KoishiItemSpell extends ItemSpell {
 
 	@Override
-	public void start(Player player, @Nullable LivingEntity target) {
+	public void start(LivingEntity player, @Nullable LivingEntity target) {
 		super.start(player, target);
 		addTicker(new Lasers());
 	}

@@ -33,7 +33,7 @@ public class GLItems {
     public static final ItemEntry<FairyIceItem> FAIRY_ICE_CRYSTAL;
     public static final ItemEntry<FrozenFrogItem> FROZEN_FROG_COLD, FROZEN_FROG_WARM, FROZEN_FROG_TEMPERATE;
 
-    public static final ItemEntry<SpellItem> REIMU_SPELL, MARISA_SPELL, SANAE_SPELL, YUKARI_SPELL_BUTTERFLY, YUKARI_SPELL_LASER, MYSTIA_SPELL, KOISHI_SPELL;
+    public static final ItemEntry<SpellItem> REIMU_SPELL, MARISA_SPELL, SANAE_SPELL, YUKARI_SPELL_BUTTERFLY, YUKARI_SPELL_LASER, MYSTIA_SPELL, KOISHI_SPELL, REMILIA_SPELL, CLOWNPIECE_SPELL;
 
     public static final ItemEntry<StrawHatItem> STRAW_HAT;
     public static final ItemEntry<SuwakoHatItem> SUWAKO_HAT;
@@ -207,6 +207,23 @@ public class GLItems {
                     .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/" + ctx.getName())))
                     .lang("Response \"Youkai Polygraph\"")
                     .tag(DanmakuTagGen.PRESET_SPELL)
+                    .register();
+
+            REMILIA_SPELL = reg
+                    .item("spell_remilia", p -> new SpellItem(
+                            p.stacksTo(1), RemiliaItemSpell::new, false,
+                            () -> DanmakuItems.Bullet.BUBBLE.get(DyeColor.RED).get()))
+                    .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/" + ctx.getName())))
+                    .lang("Scarlet Sign \"Scarlet Meister\"")
+                    .tag(DanmakuTagGen.PRESET_SPELL)
+                    .register();
+
+            CLOWNPIECE_SPELL = reg
+                    .item("spell_clownpiece", p -> new SpellItem(
+                            p.stacksTo(1), ClownItemSpell::new, false,
+                            () -> DanmakuItems.Bullet.STAR.get(DyeColor.RED).get()))
+                    .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/" + ctx.getName())))
+                    .lang("Hell Sign \"Star and Stripe\"")
                     .register();
         }
 

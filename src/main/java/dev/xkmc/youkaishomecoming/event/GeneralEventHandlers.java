@@ -41,6 +41,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 @EventBusSubscriber(modid = GensokyoLegacy.MODID)
 public class GeneralEventHandlers {
 
+    private static final String YH_FLIGHT_TAG = "yh_granted_flight";
+
     @SubscribeEvent
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -50,14 +52,17 @@ public class GeneralEventHandlers {
                 || (ModList.get().isLoaded("curios") && CuriosCompat.hasCurioHairband(player));
         boolean wingsAndFairy = player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TouhouWingsItem
                 && player.hasEffect(YHEffects.FAIRY);
-        if (wingsAndFairy && !player.getAbilities().mayfly) {
+        boolean shouldFly = wearingHairband || wingsAndFairy;
+        if (shouldFly && !player.getAbilities().mayfly) {
             player.getAbilities().mayfly = true;
             player.onUpdateAbilities();
+            player.getPersistentData().putBoolean(YH_FLIGHT_TAG, true);
         }
-        if (!wearingHairband && !wingsAndFairy && player.getAbilities().mayfly) {
+        if (!shouldFly && player.getAbilities().mayfly && player.getPersistentData().getBoolean(YH_FLIGHT_TAG)) {
             player.getAbilities().mayfly = false;
             player.getAbilities().flying = false;
             player.onUpdateAbilities();
+            player.getPersistentData().remove(YH_FLIGHT_TAG);
         }
     }
 
@@ -178,6 +183,28 @@ public class GeneralEventHandlers {
                     mystia.initSpellCard();
                     parrot.level().addFreshEntity(mystia);
                     parrot.discard();
+                }
+                if (!event.getEntity().isCreative()) {
+                    event.getItemStack().shrink(1);
+                }
+            }
+            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onInteractBat(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        if (event.getTarget() instanceof net.minecraft.world.entity.ambient.Bat bat
+                && event.getItemStack().is(YHFood.SCARLET_DEVIL_CAKE.item.get())) {
+            if (!bat.level().isClientSide()) {
+                var remiliaType = dev.xkmc.youkaishomecoming.init.registrate.GLEntities.REMILIA.get();
+                var remilia = remiliaType.create(bat.level());
+                if (remilia != null) {
+                    remilia.moveTo(bat.position());
+                    remilia.initSpellCard();
+                    bat.level().addFreshEntity(remilia);
+                    bat.discard();
                 }
                 if (!event.getEntity().isCreative()) {
                     event.getItemStack().shrink(1);

@@ -1,0 +1,16 @@
+{
+	"required": false,
+	"priority": 2000,
+	"package": "dev.xkmc.youkaishomecoming.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"TLMCommonRegistryMixin",
+		"PlayerHolderMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 0
+	},
+	"minVersion": "0.8"
+}

@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:emptying",
+  "ingredients": [
+    {
+      "item": "youkaishomecoming:mayonnaise_flask"
+    }
+  ],
+  "results": [
+    {
+      "item": {
+        "id": "youkaishomecoming:sake_bottle"
+      }
+    },
+    {
+      "amount": 1000,
+      "id": "youkaishomecoming:mayonnaise"
+    }
+  ]
+}

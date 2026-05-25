@@ -6,6 +6,7 @@ import dev.xkmc.youkaishomecoming.content.block.bed.GLBEWLR;
 import dev.xkmc.youkaishomecoming.content.block.bed.YoukaiBedBlock;
 import dev.xkmc.youkaishomecoming.content.block.bed.YoukaiBedBlockEntity;
 import dev.xkmc.youkaishomecoming.content.block.bed.YoukaiBedRenderer;
+import dev.xkmc.youkaishomecoming.content.block.deco.BasketBlock;
 import dev.xkmc.youkaishomecoming.content.block.deco.BooksBlock;
 import dev.xkmc.youkaishomecoming.content.block.donation.DonationBoxBlock;
 import dev.xkmc.youkaishomecoming.content.block.donation.DonationBoxBlockEntity;
@@ -111,7 +112,8 @@ public class GLBlocks {
     }
 
     public static void register() {
-
+        // ensure BasketBlock static initializer runs and Baskets enum entries are registered
+        BasketBlock.register();
     }
 
 }

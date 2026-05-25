@@ -73,6 +73,13 @@ public class EntityLootGen {
 		);
 	}
 
+	public static void remilia(RegistrateEntityLootTables pvd, EntityType<?> type) {
+		pvd.add(type, LootTable.lootTable()
+				.withPool(LootPool.lootPool().add(getItem(GLItems.REMILIA_SPELL.get(), 1, 1))
+						.when(byPlayer()).when(danmakuKill()))
+		);
+	}
+
 	public static void rumia(RegistrateEntityLootTables pvd, EntityType<?> type) {
 		pvd.add(type, LootTable.lootTable()
 				.withPool(LootPool.lootPool().add(getItem(DanmakuItems.Bullet.CIRCLE.get(DyeColor.RED).get(), 5, 10))

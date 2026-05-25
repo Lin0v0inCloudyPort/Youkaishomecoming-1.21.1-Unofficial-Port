@@ -10,7 +10,7 @@ import dev.xkmc.danmakuapi.content.spell.spellcard.Ticker;
 import dev.xkmc.danmakuapi.init.registrate.DanmakuItems;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,9 +23,9 @@ public class SanaeItemSpell extends ItemSpell {
 	private double a0;
 
 	@Override
-	public boolean tick(Player player) {
+	public boolean tick(LivingEntity entity) {
 		if (tick == 0) {
-			a0 = player.getRandom().nextDouble() * 360;
+			a0 = entity.getRandom().nextDouble() * 360;
 			addTicker(new Star(a0, DyeColor.LIME));
 		}
 		if (tick == 10) {
@@ -35,7 +35,7 @@ public class SanaeItemSpell extends ItemSpell {
 			addTicker(new Star(a0 + 240, DyeColor.BLUE));
 		}
 		tick++;
-		return super.tick(player);
+		return super.tick(entity);
 	}
 
 	@SerialClass

@@ -42,4 +42,17 @@ public class CharacterAttachment extends PlayerCapabilityTemplate<CharacterAttac
 	public void replace(EntityType<?> target, CharacterData data) {
 		characterData.put(target, data);
 	}
+
+	public void clearHostility(Player player) {
+		for (var entry : characterData.entrySet()) {
+			var data = entry.getValue();
+			if (data.reputation < 0) {
+				data.reputation = 0;
+				if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+					dev.xkmc.youkaishomecoming.init.GensokyoLegacy.HANDLER.toClientPlayer(
+							new CharDataToClient(entry.getKey(), player.getUUID(), data), sp);
+				}
+			}
+		}
+	}
 }

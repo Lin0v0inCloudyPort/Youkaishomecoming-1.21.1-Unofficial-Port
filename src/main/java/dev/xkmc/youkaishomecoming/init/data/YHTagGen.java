@@ -130,6 +130,9 @@ public class YHTagGen {
 
 		pvd.addTag(SOYBEAN).add(YHCrops.SOYBEAN.getSeed());
 
+		pvd.addTag(SOY_SAUCE_BOTTLE).add(YHItems.SOY_SAUCE_BOTTLE.asItem());
+		pvd.addTag(MAYONNAISE_BOTTLE).add(YHItems.MAYONNAISE.asItem());
+
 		pvd.addTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "foods/eggs")))
 				.add(Items.EGG.builtInRegistryHolder().key());
 

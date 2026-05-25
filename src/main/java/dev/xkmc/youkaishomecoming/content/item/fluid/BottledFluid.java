@@ -44,7 +44,7 @@ public class BottledFluid<T extends SakeBottleItem> implements IYHFluidHolder {
 	public final ItemEntry<T> item;
 	public final FluidEntry<YHFluid> fluid;
 
-	protected @Nullable BottledDrinkSet set;
+	public @Nullable BottledDrinkSet set;
 
 	public BottledFluid(String id, int color, Supplier<Item> container, String path, NonNullBiFunction<Supplier<YHFluid>, Item.Properties, T> factory) {
 		this(id, id + "_bottle", SOLID_FLOW, SOLID_STILL, color, container, path, factory);

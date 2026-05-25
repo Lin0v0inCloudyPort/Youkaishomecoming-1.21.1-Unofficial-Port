@@ -16,13 +16,11 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,14 +62,6 @@ public class ReimuHairbandItem extends TouhouHatItem {
     @Override
     public DamageSource modifyDamageType(ItemStack stack, LivingEntity le, IDanmakuEntity danmaku, DamageSource type) {
         return DanmakuDamageTypes.abyssal(danmaku);
-    }
-
-    @Override
-    protected void tick(ItemStack stack, Level level, Player player) {
-        if (!level.isClientSide() && !player.getAbilities().mayfly && !player.isCreative() && !player.isSpectator()) {
-            player.getAbilities().mayfly = true;
-            player.onUpdateAbilities();
-        }
     }
 
     @Override

@@ -98,11 +98,7 @@ public class SlipFluidWrapper implements IFluidHandlerItem {
 
 	@Override
 	public int getTankCapacity(int tank) {
-		// FlaskItem holds 1000mb (20 uses), others hold 1000mb (4 uses for bottles, 20 uses for buckets)
-		if (container.getItem() instanceof FlaskItem) {
-			return 1000; // 20 uses * 50mb per use
-		}
-		return 1000; // Default capacity
+		return 1000;
 	}
 
 	@Override

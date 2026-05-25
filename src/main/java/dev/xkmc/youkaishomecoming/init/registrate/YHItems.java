@@ -13,7 +13,6 @@ import dev.xkmc.youkaishomecoming.content.item.ingredient.FairyIceItem;
 import dev.xkmc.youkaishomecoming.content.item.ingredient.FrozenFrogItem;
 import dev.xkmc.youkaishomecoming.content.item.fluid.BottledFluid;
 import dev.xkmc.youkaishomecoming.content.item.fluid.BottleTexture;
-import dev.xkmc.youkaishomecoming.content.item.fluid.FlaskItem;
 import dev.xkmc.youkaishomecoming.content.item.fluid.SakeBottleItem;
 import dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleItem;
 import dev.xkmc.youkaishomecoming.util.DCFluid;
@@ -61,7 +60,6 @@ public class YHItems {
 	public static final BottledFluid<SakeBottleItem> MAYONNAISE;
 	public static final BottledFluid<dev.xkmc.youkaishomecoming.content.item.misc.BloodBottleItem> BLOOD_BOTTLE;
 	public static final ItemEntry<SlipBottleItem> SAKE_BOTTLE;
-	public static final ItemEntry<FlaskItem> SOY_SAUCE_FLASK, MAYONNAISE_FLASK;
 	public static final ItemEntry<Item> CLAY_SAUCER,
 			COFFEE_BEAN, COFFEE_POWDER, CREAM, MATCHA,
 			STRIPPED_MANDRAKE_ROOT, DRIED_MANDRAKE_FLOWER, ICE_CUBE,
@@ -106,9 +104,9 @@ public class YHItems {
 		// ingredients
 		{
 			SOY_SAUCE_BOTTLE = new BottledFluid<>("soy_sauce", "soy_sauce_bottle",
-					() -> Items.GLASS_BOTTLE, "ingredient", SakeBottleItem::new);
+					() -> Items.GLASS_BOTTLE, "ingredient", SakeBottleItem::new).bottle();
 			MAYONNAISE = new BottledFluid<>("mayonnaise", "mayonnaise_bottle",
-					() -> Items.GLASS_BOTTLE, "ingredient", SakeBottleItem::new);
+					() -> Items.GLASS_BOTTLE, "ingredient", SakeBottleItem::new).bottle();
 			BLOOD_BOTTLE = new BottledFluid<>("blood", "blood_bottle", "blood",
 					() -> Items.GLASS_BOTTLE, "ingredient", dev.xkmc.youkaishomecoming.content.item.misc.BloodBottleItem::new);
 			SAKE_BOTTLE = reg.item("sake_bottle", SlipBottleItem::new)
@@ -116,19 +114,6 @@ public class YHItems {
 					.model(BottleTexture::buildBottleModel)
 					.color(() -> () -> SlipBottleItem::color)
 					.lang("Flask")
-					.register();
-
-			// Large flasks (20 uses instead of 4)
-			SOY_SAUCE_FLASK = reg.item("soy_sauce_flask", p -> new FlaskItem(p.stacksTo(1), SOY_SAUCE_BOTTLE))
-					.model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/bottle/ingredient/" + ctx.getName())))
-					.color(() -> () -> FlaskItem::color)
-					.lang("Large Flask of Soy Sauce")
-					.register();
-
-			MAYONNAISE_FLASK = reg.item("mayonnaise_flask", p -> new FlaskItem(p.stacksTo(1), MAYONNAISE))
-					.model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/bottle/ingredient/" + ctx.getName())))
-					.color(() -> () -> FlaskItem::color)
-					.lang("Large Flask of Mayonnaise")
 					.register();
 
 			CREAM = reg

@@ -73,7 +73,6 @@ public class CirnoEntity extends FairyEntity implements IYoukaiMerchant {
     protected List<AbstractYoukaiModule> createModules() {
         return List.of(
                 new HomeModule(this),
-                new FeedModule(this),
                 new TalkModule(this),
                 new CountPickupModule(this, e -> e.getItem() instanceof FrozenFrogItem)
         );

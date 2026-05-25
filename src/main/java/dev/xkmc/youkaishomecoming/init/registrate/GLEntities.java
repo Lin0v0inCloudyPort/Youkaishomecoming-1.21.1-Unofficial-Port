@@ -17,6 +17,7 @@ import dev.xkmc.youkaishomecoming.content.entity.characters.rumia.RumiaEntity;
 import dev.xkmc.youkaishomecoming.content.entity.characters.rumia.RumiaRenderer;
 import dev.xkmc.youkaishomecoming.content.entity.misc.FairyIce;
 import dev.xkmc.youkaishomecoming.content.entity.misc.FrozenFrog;
+import dev.xkmc.youkaishomecoming.content.entity.characters.boss.RemiliaEntity;
 import dev.xkmc.youkaishomecoming.content.entity.youkai.BossYoukaiEntity;
 import dev.xkmc.youkaishomecoming.content.entity.youkai.GeneralYoukaiEntity;
 import dev.xkmc.youkaishomecoming.content.entity.youkai.GeneralYoukaiRenderer;
@@ -45,6 +46,7 @@ public class GLEntities {
 	public static final EntityEntry<MarisaEntity> MARISA;
 	public static final EntityEntry<GeneralYoukaiEntity> MYSTIA;
 	public static final EntityEntry<BossYoukaiEntity> YUKARI, KOISHI;
+	public static final EntityEntry<RemiliaEntity> REMILIA;
 	public static final EntityEntry<FairyEntity> SUNNY, LUNA, STAR;
 
 	public static final EntityEntry<FrozenFrog> FROZEN_FROG;
@@ -150,6 +152,15 @@ public class GLEntities {
 					.renderer(() -> GeneralYoukaiRenderer::new)
 					.spawnEgg(0x88BA7F, 0x645856).build()
 					.loot(EntityLootGen::koishi)
+					.register();
+
+			REMILIA = GensokyoLegacy.REGISTRATE
+					.entity("remilia_scarlet", RemiliaEntity::new, MobCategory.MONSTER)
+					.properties(e -> e.sized(0.4F, 1.8f).clientTrackingRange(10))
+					.attributes(BossYoukaiEntity::createAttributes)
+					.renderer(() -> GeneralYoukaiRenderer::new)
+					.spawnEgg(0xF3C1CC, 0x86B9F3).build()
+					.loot(EntityLootGen::remilia)
 					.register();
 
 			MARISA = GensokyoLegacy.REGISTRATE

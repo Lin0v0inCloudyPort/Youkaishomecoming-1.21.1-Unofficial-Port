@@ -7,6 +7,7 @@ import dev.xkmc.l2serial.serialization.marker.SerialField;
 import dev.xkmc.youkaishomecoming.content.pot.overlay.IHintableBlock;
 import dev.xkmc.youkaishomecoming.content.pot.table.item.TableItem;
 import dev.xkmc.youkaishomecoming.content.pot.table.item.TableItemManager;
+import dev.xkmc.youkaishomecoming.content.item.fluid.SlipBottleItem;
 import dev.xkmc.youkaishomecoming.init.registrate.YHItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -71,11 +72,10 @@ public class CuisineBoardBlockEntity extends BaseBlockEntity implements IHintabl
 
 	public int addItem(ItemStack stack) {
 		if (level == null) return 0;
-		// TODO: SlipBottleItem disabled - needs NeoForge 1.21.1 capability rewrite
-		// if (SlipBottleItem.isSlipContainer(stack)) {
-		// 	stack = SlipBottleItem.getContentStack(stack);
-		// 	if (stack.isEmpty()) return 0;
-		// }
+		if (SlipBottleItem.isSlipContainer(stack)) {
+			stack = SlipBottleItem.getContentStack(stack);
+			if (stack.isEmpty()) return 0;
+		}
 		var prev = getModel();
 		var ans = prev.find(level, stack);
 		if (ans.isPresent()) {

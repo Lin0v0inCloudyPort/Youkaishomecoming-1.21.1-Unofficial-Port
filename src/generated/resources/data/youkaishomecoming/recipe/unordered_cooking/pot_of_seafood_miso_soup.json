@@ -2,7 +2,8 @@
   "type": "youkaishomecoming:unordered_cooking",
   "input": [
     {
-      "item": "youkaishomecoming:soy_sauce_bottle"
+      "type": "youkaishomecoming:slip_bottle",
+      "fluid": "youkaishomecoming:soy_sauce"
     },
     {
       "item": "youkaishomecoming:soybean"

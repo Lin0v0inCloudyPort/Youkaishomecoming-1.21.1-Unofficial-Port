@@ -13,11 +13,11 @@ Contains essentially all content from the 1.20.1 version (food, cooking, buildin
 ## Attribution
 
 - **Original mod**: [Youkai's Homecoming](https://www.curseforge.com/minecraft/mc-mods/youkais-homecoming) by **lcy0x1**
-- **Original source**: <https://github.com/Lcy0x1/Youkai-Homecoming>
+- **Original source**: <https://github.com/Minecraft-LightLand/Youkai-Homecoming>
 - **License**: LGPL-2.1-only (inherited from upstream)
-- **This 1.21.1 port**: maintained by **yinyuze**
+- **This 1.21.1 port**: maintained by **yinyuze**, with permission from lcy0x1
 
-This is a community-maintained port. All original concepts, art, and code design credit belong to lcy0x1 and the upstream contributors. The port code is licensed under the same LGPL-2.1 license as the original.
+This is a community-maintained port, made with permission from lcy0x1. All original concepts, art, and code design credit belong to lcy0x1 and the upstream contributors. The port code is licensed under the same LGPL-2.1 license as the original.
 
 ---
 
@@ -27,7 +27,7 @@ Most 1.20.1 features have been ported and are functional in 1.21.1:
 
 - **Food & cooking system** (cooking pot, kettle, moka pot, basin, steamer, cuisine board, sauce rack, ingredient rack, wine shelf, etc.)
 - **Touhou characters** (Reimu, Cirno, Rumia and more) with custom AI, trading, spell cards
-- **Danmaku system** (via [danmaku_api](https://github.com/Lcy0x1/DanmakuAPI))
+- **Danmaku system** (via [danmaku_api](https://github.com/Minecraft-LightLand/DanmakuAPI))
 - **Character equipment**: Reimu's hairband, Rumia's hairband, Cirno's hairband / wings, Suwako's hat, Koishi's hat, Straw hat — all with their original mechanics
 - **Reputation system**, **donation box → summon Reimu**, **flesh / blood mechanics**, **frog god hat progression**
 - **Custom structures** (Hakurei Shrine, Cirno's Nest, Youkai Nest)
@@ -77,7 +77,7 @@ The `libs/` directory contains the project's library dependencies (`l2core`, `l2
 
 For bugs / suggestions specific to this 1.21.1 port, please open an issue on this repository.
 
-For issues that also exist in the official 1.20.1 version, please report them to the [upstream repository](https://github.com/Lcy0x1/Youkai-Homecoming) instead.
+For issues that also exist in the official 1.20.1 version, please report them to the [upstream repository](https://github.com/Minecraft-LightLand/Youkai-Homecoming) instead.
 
 ---
 
