@@ -50,9 +50,10 @@ public class GeneralEventHandlers {
         if (player.isCreative() || player.isSpectator()) return;
         boolean wearingHairband = player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ReimuHairbandItem
                 || (ModList.get().isLoaded("curios") && CuriosCompat.hasCurioHairband(player));
+        boolean hairbandGrantsFlight = wearingHairband && GLModConfig.SERVER.reimuHairbandFlightEnable.get();
         boolean wingsAndFairy = player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TouhouWingsItem
                 && player.hasEffect(YHEffects.FAIRY);
-        boolean shouldFly = wearingHairband || wingsAndFairy;
+        boolean shouldFly = hairbandGrantsFlight || wingsAndFairy;
         if (shouldFly && !player.getAbilities().mayfly) {
             player.getAbilities().mayfly = true;
             player.onUpdateAbilities();
@@ -100,7 +101,7 @@ public class GeneralEventHandlers {
     @SubscribeEvent
     public static void onVillagerHurt(LivingIncomingDamageEvent event) {
         if (!(event.getEntity() instanceof Villager)) return;
-        if (!GLModConfig.SERVER.reimuSummonFlesh.get()) return;
+        if (!GLModConfig.SERVER.reimuSummonKill.get()) return;
         if (!(event.getSource().getEntity() instanceof ServerPlayer sp)) return;
         if (!isYoukai(sp)) return;
         ReimuEventHandlers.hurtWarn(sp);
@@ -109,7 +110,7 @@ public class GeneralEventHandlers {
     @SubscribeEvent
     public static void onVillagerKilled(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof Villager)) return;
-        if (!GLModConfig.SERVER.reimuSummonFlesh.get()) return;
+        if (!GLModConfig.SERVER.reimuSummonKill.get()) return;
         if (!(event.getSource().getEntity() instanceof LivingEntity le)) return;
         if (!isYoukai(le)) return;
         ReimuEventHandlers.triggerReimuResponse(le, 16, false);
@@ -145,6 +146,15 @@ public class GeneralEventHandlers {
     public static void onDanmakuUse(DanmakuUseEvent event) {
         Player player = event.getPlayer();
         ItemStack ammo = event.getStack();
+
+        // Establish a danmaku-battle session against the targeted youkai when the player shoots.
+        if (!player.level().isClientSide()) {
+            var target = dev.xkmc.l2library.content.raytrace.RayTraceUtil.serverGetTarget(player);
+            if (target != null) {
+                dev.xkmc.youkaishomecoming.content.attachment.graze.GrazeHelperGL.addSession(player, target);
+            }
+        }
+
         net.minecraft.world.item.DyeColor color = null;
         if (ammo.getItem() instanceof DanmakuItem d) color = d.color;
         else if (ammo.getItem() instanceof LaserItem l) color = l.color;
@@ -222,6 +232,40 @@ public class GeneralEventHandlers {
             player.getInventory().add(YHItems.BLOOD_BOTTLE.item().asStack(1));
         } else {
             le.spawnAtLocation(YHItems.BLOOD_BOTTLE.item().asStack(1));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onFinalizeSpawn(net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent event) {
+        var reason = event.getSpawnType();
+        // Only block automatic spawns; spawn eggs, commands and breeding stay unaffected.
+        if (reason != net.minecraft.world.entity.MobSpawnType.NATURAL
+                && reason != net.minecraft.world.entity.MobSpawnType.CHUNK_GENERATION
+                && reason != net.minecraft.world.entity.MobSpawnType.SPAWNER) return;
+        var type = event.getEntity().getType();
+        boolean blocked = false;
+        double rate = 1.0;
+        if (type == dev.xkmc.youkaishomecoming.init.registrate.GLEntities.DEER.get()) {
+            blocked = !GLModConfig.SERVER.spawnDeer.get();
+            rate = GLModConfig.SERVER.spawnDeerRate.get();
+        } else if (type == dev.xkmc.youkaishomecoming.init.registrate.GLEntities.BOAR.get()) {
+            blocked = !GLModConfig.SERVER.spawnBoar.get();
+            rate = GLModConfig.SERVER.spawnBoarRate.get();
+        } else if (type == dev.xkmc.youkaishomecoming.init.registrate.GLEntities.TUNA.get()) {
+            blocked = !GLModConfig.SERVER.spawnTuna.get();
+            rate = GLModConfig.SERVER.spawnTunaRate.get();
+        } else if (type == dev.xkmc.youkaishomecoming.init.registrate.GLEntities.CRAB.get()) {
+            blocked = !GLModConfig.SERVER.spawnCrab.get();
+        } else if (type == dev.xkmc.youkaishomecoming.init.registrate.YHEntities.LAMPREY.get()) {
+            blocked = !GLModConfig.SERVER.spawnLamprey.get();
+            rate = GLModConfig.SERVER.spawnLampreyRate.get();
+        }
+        if (!blocked && rate < 1.0 && event.getEntity().getRandom().nextDouble() >= rate) {
+            blocked = true;
+        }
+        if (blocked) {
+            event.setSpawnCancelled(true);
+            event.setCanceled(true);
         }
     }
 

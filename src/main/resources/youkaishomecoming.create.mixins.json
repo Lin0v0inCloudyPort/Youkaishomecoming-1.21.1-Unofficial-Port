@@ -1,0 +1,15 @@
+{
+	"required": false,
+	"priority": 2000,
+	"package": "dev.xkmc.youkaishomecoming.mixin.compat.create",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"CreateHarvesterMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 0
+	},
+	"minVersion": "0.8"
+}

@@ -34,6 +34,7 @@ public class GLItems {
     public static final ItemEntry<FrozenFrogItem> FROZEN_FROG_COLD, FROZEN_FROG_WARM, FROZEN_FROG_TEMPERATE;
 
     public static final ItemEntry<SpellItem> REIMU_SPELL, MARISA_SPELL, SANAE_SPELL, YUKARI_SPELL_BUTTERFLY, YUKARI_SPELL_LASER, MYSTIA_SPELL, KOISHI_SPELL, REMILIA_SPELL, CLOWNPIECE_SPELL;
+    public static final ItemEntry<dev.xkmc.danmakuapi.content.item.CustomSpellItem> CUSTOM_SPELL_RING, CUSTOM_SPELL_HOMING;
 
     public static final ItemEntry<StrawHatItem> STRAW_HAT;
     public static final ItemEntry<SuwakoHatItem> SUWAKO_HAT;
@@ -224,6 +225,24 @@ public class GLItems {
                             () -> DanmakuItems.Bullet.STAR.get(DyeColor.RED).get()))
                     .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/" + ctx.getName())))
                     .lang("Hell Sign \"Star and Stripe\"")
+                    .register();
+
+            CUSTOM_SPELL_RING = reg
+                    .item("custom_spell_ring", p -> new dev.xkmc.danmakuapi.content.item.CustomSpellItem(
+                            p.stacksTo(1), false,
+                            dev.xkmc.danmakuapi.content.custom.data.RingSpellFormData.FLOWER))
+                    .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/custom_spell")))
+                    .lang("Custom Spellcard \"Ring\"")
+                    .tag(DanmakuTagGen.CUSTOM_SPELL)
+                    .register();
+
+            CUSTOM_SPELL_HOMING = reg
+                    .item("custom_spell_homing", p -> new dev.xkmc.danmakuapi.content.item.CustomSpellItem(
+                            p.stacksTo(1), true,
+                            dev.xkmc.danmakuapi.content.custom.data.HomingSpellFormData.RING))
+                    .model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/spell/custom_spell")))
+                    .lang("Custom Spellcard \"Homing\"")
+                    .tag(DanmakuTagGen.CUSTOM_SPELL)
                     .register();
         }
 

@@ -155,6 +155,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    mavenLocal()
     maven { // Registrate
         url "https://maven.ithundxr.dev/snapshots"
     }
@@ -194,7 +195,6 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
-    mavenLocal();
 }
 
 if (lljij.toBoolean()) {
@@ -220,7 +220,7 @@ dependencies {
     implementation jarJar(group: 'dev.xkmc', name: 'l2itemselector', version: "[${l2itemselector_ver},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2damagetracker', version: "[${l2damagetracker_ver},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2menustacker', version: "[${l2menustacker_ver},)")
-    implementation jarJar(group: 'dev.xkmc', name: 'fast_projectile_api', version: "[${fast_projectile_api_ver},)")
+    implementation jarJar(group: 'dev.xkmc', name: 'fast_projectile_api', version: "${fast_projectile_api_ver}")
     implementation jarJar(group: 'dev.xkmc', name: 'danmaku_api', version: "[${danmaku_api_ver},)")
     implementation jarJar(group: 'dev.xkmc', name: 'l2library', version: "[${l2library_ver},)")
     implementation jarJar(group: 'net.tslat.smartbrainlib', name: 'SmartBrainLib-neoforge-1.21.1', version: "[1.16.1,)")
@@ -241,4 +241,5 @@ dependencies {
     //implementation "dev.xkmc:fruitsdelight:1.2.1+3"
 
     compileOnly fileTree(dir: 'libs', include: ['ThirstWasTaken-*.jar'])
+    compileOnly fileTree(dir: 'libs', include: ['create-*.jar'])
 }

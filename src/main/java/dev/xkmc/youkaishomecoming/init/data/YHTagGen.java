@@ -81,6 +81,16 @@ public class YHTagGen {
 	public static final TagKey<Block> SIKKUI = block("sikkui");
 	public static final TagKey<Block> CRAB_DIGABLE = block("crab_digable");
 
+	// Soft compat tags from other mods. Created via ResourceLocation strings only — no
+	// hard dependency on Quark / FTB Ultimine. If those mods aren't loaded, the tags are
+	// simply unused. They tell those mods "don't blanket-handle this CropBlock as a
+	// generic crop", which would otherwise reset our two-tall coffea/tea to age=0 and
+	// orphan the upper half.
+	public static final TagKey<Block> QUARK_SIMPLE_HARVEST_BLACKLIST =
+			TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("quark", "simple_harvest_blacklisted"));
+	public static final TagKey<Block> FTBULTIMINE_SINGLE_CROP_BLACKLIST =
+			TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("ftbultimine", "single_crop_harvesting_blacklist"));
+
 	public static void onEffectTagGen(RegistrateTagsProvider.IntrinsicImpl<MobEffect> pvd) {
 	}
 
@@ -90,6 +100,23 @@ public class YHTagGen {
 		pvd.addTag(FARMLAND_SOYBEAN).add(Blocks.FARMLAND);
 		pvd.addTag(FARMLAND_TEA).add(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL);
 		pvd.addTag(CRAB_DIGABLE).add(Blocks.SAND, Blocks.GRAVEL);
+
+		// Opt our two-tall crops out of foreign right-click-harvest handlers (Quark
+		// SimpleHarvest, FTB Ultimine single-crop harvest). Their generic CropBlock path
+		// resets one half to age=0 via setBlock, leaving the other half orphaned.
+		pvd.addTag(QUARK_SIMPLE_HARVEST_BLACKLIST)
+				.add(YHCrops.COFFEA.getPlant(), YHCrops.TEA.getPlant());
+		pvd.addTag(FTBULTIMINE_SINGLE_CROP_BLACKLIST)
+				.add(YHCrops.COFFEA.getPlant(), YHCrops.TEA.getPlant());
+		// Grape branches/fruits also extend BushBlock and would otherwise be reset to age=0
+		// by Ultimine's single-crop harvest, bypassing our pickup() that triggers GRAPE_HARVEST.
+		for (YHCrops grape : new YHCrops[]{YHCrops.RED_GRAPE, YHCrops.BLACK_GRAPE, YHCrops.WHITE_GRAPE}) {
+			if (grape.vineSet != null) {
+				pvd.addTag(FTBULTIMINE_SINGLE_CROP_BLACKLIST)
+						.add(grape.vineSet.side.get(), grape.vineSet.hanging.get(), grape.vineSet.center.get());
+			}
+		}
+
 		if (ModList.get().isLoaded("sereneseasons")) {
 			SeasonCompat.genBlock(pvd);
 		}

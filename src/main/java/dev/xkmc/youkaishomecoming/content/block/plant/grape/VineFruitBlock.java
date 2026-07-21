@@ -43,6 +43,22 @@ public abstract class VineFruitBlock extends Block implements HarvestableBlock {
 
 	protected abstract int getBaseAge();
 
+	public IntegerProperty getHarvesterAgeProperty() {
+		return getAgeProperty();
+	}
+
+	public int getHarvesterMaxAge() {
+		return getMaxAge();
+	}
+
+	public int getHarvesterBaseAge() {
+		return getBaseAge();
+	}
+
+	public ItemLike getHarvesterFruit(BlockState state) {
+		return getFruit(state);
+	}
+
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(getAgeProperty(), FACING);
@@ -65,7 +81,7 @@ public abstract class VineFruitBlock extends Block implements HarvestableBlock {
 					pickup(state, level, pos, player);
 				}
 			}
-			level.playSound(player, pos, ModSounds.ITEM_TOMATO_PICK_FROM_BUSH.get(), SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+			level.playSound(player, pos, net.minecraft.sounds.SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -75,10 +91,9 @@ public abstract class VineFruitBlock extends Block implements HarvestableBlock {
 		int quantity = 1 + level.random.nextInt(2);
 		popResource(level, pos, new ItemStack(getFruit(state), quantity));
 		level.setBlock(pos, state.setValue(getAgeProperty(), getBaseAge()), 2);
-		// TODO: Add GRAPE_HARVEST trigger
-		// if (player instanceof ServerPlayer sp) {
-		// 	YHCriteriaTriggers.GRAPE_HARVEST.get().trigger(sp);
-		// }
+		if (player instanceof ServerPlayer sp) {
+			YHCriteriaTriggers.GRAPE_HARVEST.get().trigger(sp);
+		}
 	}
 
 

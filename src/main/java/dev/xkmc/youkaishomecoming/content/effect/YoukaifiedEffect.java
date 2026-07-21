@@ -1,6 +1,7 @@
 package dev.xkmc.youkaishomecoming.content.effect;
 
 import dev.xkmc.youkaishomecoming.init.GensokyoLegacy;
+import dev.xkmc.youkaishomecoming.init.data.GLModConfig;
 import dev.xkmc.youkaishomecoming.init.registrate.YHEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -21,9 +22,21 @@ public class YoukaifiedEffect extends MobEffect {
 
 	public YoukaifiedEffect(MobEffectCategory category, int color) {
 		super(category, color);
-		this.addAttributeModifier(Attributes.MAX_HEALTH, ID, 20f, AttributeModifier.Operation.ADD_VALUE);
-		this.addAttributeModifier(Attributes.ATTACK_DAMAGE, GensokyoLegacy.loc("youkaified_atk"), 0.5f, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-		this.addAttributeModifier(Attributes.MOVEMENT_SPEED, GensokyoLegacy.loc("youkaified_spd"), 0.3f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+		this.addAttributeModifier(Attributes.MAX_HEALTH, ID, AttributeModifier.Operation.ADD_VALUE,
+				lv -> readConfig(GLModConfig.SERVER.youkaifiedHealthBonus, 20.0));
+		this.addAttributeModifier(Attributes.ATTACK_DAMAGE, GensokyoLegacy.loc("youkaified_atk"), AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
+				lv -> readConfig(GLModConfig.SERVER.youkaifiedAttackBonus, 0.5));
+		this.addAttributeModifier(Attributes.MOVEMENT_SPEED, GensokyoLegacy.loc("youkaified_spd"), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
+				lv -> readConfig(GLModConfig.SERVER.youkaifiedSpeedBonus, 0.3));
+	}
+
+	private static double readConfig(net.neoforged.neoforge.common.ModConfigSpec.DoubleValue value, double fallback) {
+		try {
+			return value.get();
+		} catch (IllegalStateException e) {
+			// Config not yet loaded (e.g. during effect registration). Real value is read later when the modifier is actually applied.
+			return fallback;
+		}
 	}
 
 	@Override

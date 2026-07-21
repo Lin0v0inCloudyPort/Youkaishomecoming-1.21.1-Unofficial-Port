@@ -6,6 +6,7 @@ import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import dev.xkmc.l2core.serial.loot.LootHelper;
 import dev.xkmc.youkaishomecoming.init.data.YHTagGen;
 import dev.xkmc.youkaishomecoming.init.food.YHCrops;
+import dev.xkmc.youkaishomecoming.init.registrate.YHItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -48,7 +48,7 @@ public class TeaCropBlock extends DoubleCropBlock {
 			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D),
 			Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D)};
 
-	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 6);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 8);
 
 	private final Supplier<Item> seed;
 
@@ -70,7 +70,27 @@ public class TeaCropBlock extends DoubleCropBlock {
 
 	@Override
 	public int getMaxAge() {
-		return 6;
+		return 8;
+	}
+
+	protected int getResetAge() {
+		return 4;
+	}
+
+	public int getHarvesterResetAge() {
+		return getResetAge();
+	}
+
+	public ItemStack getHarvesterPickupResult(Level level, BlockState state) {
+		return getPickupResult(level, state);
+	}
+
+	@Override
+	protected float modifySpeed(BlockState state, float val) {
+		if (state.getValue(AGE) >= getDoubleBlockStart()) {
+			return val / 4;
+		}
+		return val;
 	}
 
 	@Override
@@ -79,22 +99,30 @@ public class TeaCropBlock extends DoubleCropBlock {
 			state = level.getBlockState(pos.below());
 			pos = pos.below();
 		}
-		if (state.is(this) && state.getValue(HALF) == DoubleBlockHalf.LOWER && state.getValue(AGE) == getMaxAge()) {
+		if (state.is(this) && state.getValue(HALF) == DoubleBlockHalf.LOWER && state.getValue(AGE) >= getDoubleBlockStart()) {
 			if (!level.isClientSide()) {
-				int j = 1 + level.random.nextInt(2);
-				popResource(level, pos, new ItemStack(YHCrops.TEA.getFruits(), j));
-				if (level.random.nextInt(8) == 0) {
-					popResource(level, pos, new ItemStack(YHCrops.TEA.getSeed(), j));
-				}
+				popResource(level, pos, getPickupResult(level, state));
 				level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS,
 						1.0F, 0.8F + level.random.nextFloat() * 0.4F);
-				BlockState blockstate = state.setValue(AGE, 5);
-				setGrowth(level, pos, 5, 2);
+				BlockState blockstate = state.setValue(AGE, getResetAge());
+				setGrowth(level, pos, getResetAge(), 2);
 				level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
 			}
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		} else {
 			return super.useWithoutItem(state, level, pos, player, result);
+		}
+	}
+
+	protected ItemStack getPickupResult(Level level, BlockState state) {
+		int age = state.getValue(AGE);
+		if (age == getMaxAge()) {
+			return new ItemStack(YHCrops.TEA.getSeed(), 1);
+		} else if (age == getMaxAge() - 1) {
+			return new ItemStack(YHItems.CAMELLIA.get(), 1);
+		} else {
+			int j = 1 + level.random.nextInt(2);
+			return new ItemStack(YHCrops.TEA.getFruits(), j);
 		}
 	}
 
@@ -114,23 +142,24 @@ public class TeaCropBlock extends DoubleCropBlock {
 
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		int age = getAge(pState);
-		if (age <= 4) {
+		if (age <= 3) {
 			return SHAPE_BY_AGE[age];
 		}
-		if (age == 5) {
+		if (age == 4) {
 			return SMALL;
 		}
-		if (age == 6 && pState.getValue(HALF) == DoubleBlockHalf.UPPER)
-			return SHAPE_BY_AGE[5];
+		if (age >= getDoubleBlockStart() && pState.getValue(HALF) == DoubleBlockHalf.UPPER)
+			return SHAPE_BY_AGE[4];
 		return Shapes.block();
 	}
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
 		int age = getAge(state);
+		if (age <= 3) return Shapes.empty();
 		if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-			if (age == 5) return SMALL;
-			if (age == 6) return Shapes.block();
+			if (age == 4) return SMALL;
+			if (age >= 5) return Shapes.block();
 		}
 		return Shapes.empty();
 	}
@@ -139,31 +168,74 @@ public class TeaCropBlock extends DoubleCropBlock {
 		pvd.getVariantBuilder(ctx.get()).forAllStates(state -> {
 			int age = state.getValue(AGE);
 			String tex = name + "_stage" + age;
-			if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-				return ConfiguredModel.builder().modelFile(pvd.models()
-						.withExistingParent(tex + "_upper", pvd.mcLoc("block/air"))
-						.texture("particle", pvd.modLoc("block/" + name + "_bush_leaves"))
-				).build();
-			}
-			if (age <= 4) {
-				return ConfiguredModel.builder().modelFile(pvd.models()
-						.cross(tex, pvd.modLoc("block/" + tex)).renderType("cutout")).build();
-			} else {
-				var file = pvd.models()
-						.getBuilder("block/" + tex)
-						.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/" + tex)));
-				file.ao(false);
-				file.renderType("cutout");
-				if (age == 5) {
-					file.texture("base", pvd.modLoc("block/" + name + "_stage5"));
-				} else {
-					file.texture("leaves", pvd.modLoc("block/" + name + "_bush_leaves"));
-					file.texture("trunk", pvd.modLoc("block/" + name + "_bush_trunk"));
+			if (age < 4) {
+				if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+					return ConfiguredModel.builder().modelFile(pvd.models()
+							.withExistingParent(tex + "_upper", pvd.mcLoc("block/air"))
+							.texture("particle", pvd.modLoc("block/plants/" + name + "/" + tex))
+					).build();
 				}
-				file.texture("top", pvd.modLoc("block/" + name + "_bush_top"));
-				file.texture("side", pvd.modLoc("block/" + name + "_bush_side"));
+				return ConfiguredModel.builder().modelFile(pvd.models()
+						.cross(tex, pvd.modLoc("block/plants/" + name + "/" + tex)).renderType("cutout")).build();
+			}
+			if (age == 4) {
+				if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+					return ConfiguredModel.builder().modelFile(pvd.models()
+							.withExistingParent(tex + "_upper", pvd.mcLoc("block/air"))
+							.texture("particle", pvd.modLoc("block/plants/" + name + "/small_" + name + "_bush_top"))
+					).build();
+				}
+				var file = pvd.models()
+						.getBuilder("block/" + tex).ao(false).renderType("cutout")
+						.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/plant/small_bush")))
+						.texture("top", pvd.modLoc("block/plants/" + name + "/small_" + name + "_bush_top"))
+						.texture("side", pvd.modLoc("block/plants/" + name + "/small_" + name + "_bush_side"))
+						.texture("inside", pvd.modLoc("block/plants/" + name + "/small_" + name + "_bush_inside"));
 				return ConfiguredModel.builder().modelFile(file).build();
 			}
+			if (age == 5) {
+				if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+					return ConfiguredModel.builder().modelFile(pvd.models()
+							.withExistingParent(tex + "_upper", pvd.mcLoc("block/air"))
+							.texture("particle", pvd.modLoc("block/plants/" + name + "/" + name + "_bush_side"))
+					).build();
+				}
+				var file = pvd.models()
+						.getBuilder("block/" + tex).ao(false).renderType("cutout")
+						.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/plant/medium_bush")))
+						.texture("top", pvd.modLoc("block/plants/" + name + "/" + name + "_bush_top"))
+						.texture("side", pvd.modLoc("block/plants/" + name + "/" + name + "_bush_side"))
+						.texture("inside", pvd.modLoc("block/plants/" + name + "/medium_" + name + "_bush_inside"));
+				return ConfiguredModel.builder().modelFile(file).build();
+			}
+			// ages 6-8: large bush
+			String side = name;
+			if (age == 8) side = name + "_seed";
+			if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+				if (age == 7) {
+					var file = pvd.models()
+							.getBuilder("block/" + tex + "_upper").ao(false).renderType("cutout")
+							.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/plant/large_bush_top_blossom")))
+							.texture("top", pvd.modLoc("block/plants/" + name + "/" + side + "_bush_top"))
+							.texture("side", pvd.modLoc("block/plants/" + name + "/" + side + "_bush_side"))
+							.texture("inside", pvd.modLoc("block/plants/" + name + "/medium_" + name + "_bush_inside"))
+							.texture("base", pvd.modLoc("block/plants/" + name + "/camellia_flower_base"));
+					return ConfiguredModel.builder().modelFile(file).build();
+				}
+				var file = pvd.models()
+						.getBuilder("block/" + tex + "_upper").ao(false).renderType("cutout")
+						.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/plant/large_bush_top")))
+						.texture("top", pvd.modLoc("block/plants/" + name + "/" + side + "_bush_top"))
+						.texture("side", pvd.modLoc("block/plants/" + name + "/" + side + "_bush_side"))
+						.texture("inside", pvd.modLoc("block/plants/" + name + "/medium_" + name + "_bush_inside"));
+				return ConfiguredModel.builder().modelFile(file).build();
+			}
+			var file = pvd.models()
+					.getBuilder("block/" + tex).ao(false).renderType("cutout")
+					.parent(new ModelFile.UncheckedModelFile(pvd.modLoc("custom/plant/large_bush_bottom")))
+					.texture("side", pvd.modLoc("block/plants/" + name + "/" + side + "_bush_side"))
+					.texture("inside", pvd.modLoc("block/plants/" + name + "/large_" + name + "_bush_inside"));
+			return ConfiguredModel.builder().modelFile(file).build();
 		});
 	}
 
@@ -175,7 +247,7 @@ public class TeaCropBlock extends DoubleCropBlock {
 						.when(helper.enumState(block, HALF, DoubleBlockHalf.LOWER)))
 				.withPool(LootPool.lootPool()
 						.when(helper.enumState(block, HALF, DoubleBlockHalf.LOWER))
-						.when(helper.intState(block, CropBlock.AGE, 6))
+						.when(helper.intState(block, AGE, 8))
 						.add(LootItem.lootTableItem(crop.getFruits())
 								.apply(helper.fortuneBin()))
 				)));

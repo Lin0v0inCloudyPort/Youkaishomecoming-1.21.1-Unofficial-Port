@@ -17,6 +17,15 @@ public class CuriosManager {
 		return false;
 	}
 
+	public static boolean hasHead(LivingEntity le, Item item, boolean checkRender) {
+		if (le.getItemBySlot(EquipmentSlot.HEAD).is(item))
+			return true;
+		if (ModList.get().isLoaded("curios")) {
+			return CuriosCompat.hasWings(le, item, checkRender);
+		}
+		return false;
+	}
+
 	public static boolean hasAnyWings(LivingEntity le) {
 		if (le.getItemBySlot(EquipmentSlot.CHEST).is(GLTagGen.TOUHOU_WINGS))
 			return true;

@@ -110,6 +110,7 @@ public class FermentationTankBlockEntity extends BaseBlockEntity
 				totalTime = 0;
 				recipeId = null;
 				recipe = null;
+				sync();
 			}
 		}
 	}

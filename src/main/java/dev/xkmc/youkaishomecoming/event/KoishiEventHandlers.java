@@ -2,6 +2,7 @@ package dev.xkmc.youkaishomecoming.event;
 
 import dev.xkmc.youkaishomecoming.content.entity.characters.maiden.MaidenEntity;
 import dev.xkmc.youkaishomecoming.init.GensokyoLegacy;
+import dev.xkmc.youkaishomecoming.init.data.GLModConfig;
 import dev.xkmc.youkaishomecoming.init.registrate.GLEffects;
 import dev.xkmc.youkaishomecoming.init.registrate.GLItems;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -40,9 +41,13 @@ public class KoishiEventHandlers {
 				player.removeEffect(GLEffects.UNCONSCIOUS);
 			}
 			var hat = GLItems.KOISHI_HAT.get();
-			if (player.getItemBySlot(EquipmentSlot.HEAD).is(hat)) {
-				if (player.getCooldowns().getCooldownPercent(hat, 0) < 0.5)
-					player.getCooldowns().addCooldown(hat, 200);
+			boolean hasHat = player.getItemBySlot(EquipmentSlot.HEAD).is(hat)
+					|| (net.neoforged.fml.ModList.get().isLoaded("curios")
+					&& dev.xkmc.youkaishomecoming.compat.curios.CuriosCompat.hasCurioKoishiHat(player));
+			if (hasHat) {
+				int cooldown = GLModConfig.SERVER.koishiHatCooldown.get();
+				if (cooldown > 0 && player.getCooldowns().getCooldownPercent(hat, 0) < 0.5)
+					player.getCooldowns().addCooldown(hat, cooldown);
 			}
 		}
 	}

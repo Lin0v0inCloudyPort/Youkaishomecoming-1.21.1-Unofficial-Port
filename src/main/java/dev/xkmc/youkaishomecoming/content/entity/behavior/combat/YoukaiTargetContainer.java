@@ -94,6 +94,15 @@ public class YoukaiTargetContainer {
 		list.remove(uuid);
 	}
 
+	public void addPlayer(LivingEntity e) {
+		if (isValidTarget(e)) {
+			list.add(e.getUUID());
+			if (list.size() > maxSize) {
+				list.removeFirst();
+			}
+		}
+	}
+
 	public List<LivingEntity> getTargets() {
 		List<LivingEntity> ans = new ArrayList<>();
 		if (!(youkai.level() instanceof ServerLevel sl)) return ans;

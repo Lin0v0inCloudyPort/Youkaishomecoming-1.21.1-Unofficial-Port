@@ -52,7 +52,8 @@ public class IngredientRackBlockEntity extends BaseBlockEntity implements BaseCo
 			if (hand == InteractionHand.OFF_HAND) return false;
 			if (!level.isClientSide()) {
 				int amount = player.isShiftKeyDown() ? Math.min(ans.getCount(), ans.getMaxStackSize()) : 1;
-				player.getInventory().placeItemBackInInventory(ans.split(amount));
+				ItemStack taken = ans.split(amount);
+				giveToBackpackFirst(player, taken);
 				level.playSound(null, getBlockPos(), SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1, 1);
 				notifyTile();
 			}
@@ -81,6 +82,28 @@ public class IngredientRackBlockEntity extends BaseBlockEntity implements BaseCo
 			return true;
 		}
 		return false;
+	}
+
+	private static void giveToBackpackFirst(Player player, ItemStack stack) {
+		var inv = player.getInventory();
+		for (int i = 9; i < 36 && !stack.isEmpty(); i++) {
+			ItemStack slot = inv.getItem(i);
+			if (!slot.isEmpty() && ItemStack.isSameItemSameComponents(slot, stack)) {
+				int room = Math.min(slot.getMaxStackSize(), inv.getMaxStackSize()) - slot.getCount();
+				if (room <= 0) continue;
+				int move = Math.min(room, stack.getCount());
+				slot.grow(move);
+				stack.shrink(move);
+			}
+		}
+		for (int i = 9; i < 36 && !stack.isEmpty(); i++) {
+			if (inv.getItem(i).isEmpty()) {
+				inv.setItem(i, stack.copyAndClear());
+			}
+		}
+		if (!stack.isEmpty() && !inv.add(stack)) {
+			player.drop(stack, false);
+		}
 	}
 
 }

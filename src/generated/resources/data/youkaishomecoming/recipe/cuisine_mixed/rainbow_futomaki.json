@@ -16,10 +16,10 @@
     },
     [
       {
-        "item": "minecraft:carrot"
+        "tag": "c:vegetables/carrot"
       },
       {
-        "item": "minecraft:beetroot"
+        "tag": "c:vegetables/beetroot"
       }
     ],
     {

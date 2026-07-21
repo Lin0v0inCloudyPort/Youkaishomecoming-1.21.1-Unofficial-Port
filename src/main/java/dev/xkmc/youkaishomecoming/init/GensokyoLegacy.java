@@ -68,6 +68,7 @@ public class GensokyoLegacy {
             h -> h.create(FrogSyncPacket.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
             h -> h.create(CharDataToClient.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
             h -> h.create(KoishiStartPacket.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
+            h -> h.create(dev.xkmc.youkaishomecoming.content.attachment.graze.GrazeToClient.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
             h -> h.create(BlockInfoToClient.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
             h -> h.create(CharacterInfoToClient.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
             h -> h.create(CombatToClient.class, PacketHandler.NetDir.PLAY_TO_CLIENT),
@@ -118,6 +119,7 @@ public class GensokyoLegacy {
         GLModConfig.init();
         YHModConfig.init();
         TouhouSpellCards.registerSpells();
+        dev.xkmc.youkaishomecoming.content.attachment.graze.GrazeHelperGL.register();
         AttackEventHandler.register(1765, new GLAttackListener());
         if (ModList.get().isLoaded(TouhouLittleMaid.MOD_ID)) {
             NeoForge.EVENT_BUS.register(TLMCompat.class);
@@ -162,6 +164,23 @@ public class GensokyoLegacy {
         if (ModList.get().isLoaded("curios")) {
             dev.xkmc.youkaishomecoming.compat.curios.CuriosCompat.registerCapabilities(event);
         }
+    }
+
+    @SubscribeEvent
+    public static void modifyAttributes(net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent event) {
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.INITIAL_POWER));
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.INITIAL_RESOURCE));
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.MAX_POWER));
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.MAX_RESOURCE));
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.GRAZE_EFFECTIVENESS));
+        event.add(net.minecraft.world.entity.EntityType.PLAYER, attr(GLAttributes.HITBOX));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attr(
+            dev.xkmc.l2core.init.reg.simple.Val<net.minecraft.world.entity.ai.attributes.Attribute> val) {
+        return (net.neoforged.neoforge.registries.DeferredHolder<net.minecraft.world.entity.ai.attributes.Attribute,
+                net.minecraft.world.entity.ai.attributes.Attribute>) (Object) val.val();
     }
 
     @SubscribeEvent

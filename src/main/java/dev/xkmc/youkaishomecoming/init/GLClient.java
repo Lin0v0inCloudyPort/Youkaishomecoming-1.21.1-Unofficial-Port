@@ -44,6 +44,9 @@ public class GLClient {
 		if (ModList.get().isLoaded(TouhouLittleMaid.MOD_ID)) {
 			NeoForge.EVENT_BUS.register(TLMRenderHandler.class);
 		}
+		if (ModList.get().isLoaded("curios")) {
+			dev.xkmc.youkaishomecoming.compat.curios.CuriosClientCompat.registerRenderers();
+		}
 	}
 
 	@SubscribeEvent
@@ -65,6 +68,7 @@ public class GLClient {
 		event.registerLayerDefinition(SuwakoHatModel.STRAW, SuwakoHatModel::createStrawHat);
 		event.registerLayerDefinition(FrogStrawHatModel.STRAW, FrogStrawHatModel::createHat);
 		event.registerLayerDefinition(KoishiHatModel.HAT, KoishiHatModel::createHat);
+		event.registerLayerDefinition(CamelliaHeadDeco.LAYER_LOCATION, CamelliaHeadDeco::createBodyLayer);
 		event.registerLayerDefinition(TunaModel.LAYER_LOCATION, TunaModel::createBodyLayer);
 		event.registerLayerDefinition(BoarModel.LAYER_LOCATION, BoarModelData::createBodyLayer);
 		event.registerLayerDefinition(CrabModel.LAYER_LOCATION, CrabModelData::createBodyLayer);
@@ -105,6 +109,7 @@ public class GLClient {
 	private static <T extends LivingEntity, M extends HumanoidModel<T>> void addLayer(EntityRenderDispatcher manager, LivingEntityRenderer<T, M> ler) {
 		var mc = Minecraft.getInstance();
 		ler.addLayer(new CirnoWingsLayer<>(ler, mc.getEntityModels()));
+		ler.addLayer(new CamelliaHeadLayer<>(ler, mc.getEntityModels()));
 	}
 
 }

@@ -64,6 +64,18 @@ public abstract class BaseCropVineBlock extends BushBlock implements Harvestable
 
 	protected abstract ItemLike getFruit();
 
+	public IntegerProperty getHarvesterAgeProperty() {
+		return getAgeProperty();
+	}
+
+	public int getHarvesterBaseAge() {
+		return getBaseAge();
+	}
+
+	public ItemLike getHarvesterFruit() {
+		return getFruit();
+	}
+
 	@Nullable
 	protected abstract BlockPos getTrunk(BlockState state, BlockGetter level, BlockPos pos);
 
@@ -75,7 +87,7 @@ public abstract class BaseCropVineBlock extends BushBlock implements Harvestable
 			if (!level.isClientSide()) {
 				pickup(state, level, pos, player);
 			}
-			level.playSound(player, pos, ModSounds.ITEM_TOMATO_PICK_FROM_BUSH.get(), SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+			level.playSound(player, pos, net.minecraft.sounds.SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -85,6 +97,9 @@ public abstract class BaseCropVineBlock extends BushBlock implements Harvestable
 		int quantity = 1 + level.random.nextInt(2);
 		popResource(level, pos, new ItemStack(getFruit(), quantity));
 		level.setBlock(pos, state.setValue(getAgeProperty(), getBaseAge()), 2);
+		if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+			dev.xkmc.youkaishomecoming.init.registrate.YHCriteriaTriggers.GRAPE_HARVEST.get().trigger(sp);
+		}
 	}
 
 	@Override
@@ -93,10 +108,10 @@ public abstract class BaseCropVineBlock extends BushBlock implements Harvestable
 	}
 
 	protected float getGrowthSpeed(BlockState state, BlockGetter level, BlockPos pos) {
-		var trunk = getTrunk(state, level, pos);
-		if (trunk == null)
+		var trunkPos = getTrunk(state, level, pos);
+		if (trunkPos == null)
 			return 0;
-		return getTrunk().getGrowthSpeed(level, pos);
+		return getTrunk().getGrowthSpeed(level, trunkPos);
 	}
 
 	protected boolean mayGrow(BlockState state, LevelReader level, BlockPos pos) {

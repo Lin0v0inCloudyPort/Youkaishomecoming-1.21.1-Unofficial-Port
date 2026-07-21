@@ -124,5 +124,7 @@ public enum GLLang {
         }
 
         pvd.add(GensokyoLegacy.MODID + ".subtitle.koishi_ring", "Koishi Phone Call");
+        pvd.add(GensokyoLegacy.MODID + ".subtitle.graze", "Danmaku Graze");
+        pvd.add(GensokyoLegacy.MODID + ".subtitle.miss", "Danmaku Hit Player");
     }
 }

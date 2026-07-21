@@ -61,7 +61,7 @@ public class YHItems {
 	public static final BottledFluid<dev.xkmc.youkaishomecoming.content.item.misc.BloodBottleItem> BLOOD_BOTTLE;
 	public static final ItemEntry<SlipBottleItem> SAKE_BOTTLE;
 	public static final ItemEntry<Item> CLAY_SAUCER,
-			COFFEE_BEAN, COFFEE_POWDER, CREAM, MATCHA,
+			COFFEE_BEAN, COFFEE_POWDER, CREAM, MATCHA, CAMELLIA,
 			STRIPPED_MANDRAKE_ROOT, DRIED_MANDRAKE_FLOWER, ICE_CUBE,
 			RAW_BUN, RAW_OYAKI, EMPTY_HAND_ICON;
 	public static final ItemEntry<FairyIceItem> FAIRY_ICE_CRYSTAL;
@@ -88,6 +88,10 @@ public class YHItems {
 			COFFEE_POWDER = crop("coffee_powder", Item::new);
 			YHTea.register();
 			MATCHA = crop("matcha", Item::new);
+			//noinspection unchecked
+			CAMELLIA = (ItemEntry<Item>) (ItemEntry<?>) GensokyoLegacy.REGISTRATE.item("camellia", dev.xkmc.youkaishomecoming.content.item.curio.CamelliaItem::new)
+					.model((ctx, pvd) -> pvd.generated(ctx, pvd.modLoc("item/crops/" + ctx.getName())))
+					.register();
 			STRIPPED_MANDRAKE_ROOT = crop("stripped_mandrake_root", Item::new);
 			DRIED_MANDRAKE_FLOWER = crop("dried_mandrake_flower", Item::new);
 			SOYBEAN_BAG = YHCrops.SOYBEAN.createBag();

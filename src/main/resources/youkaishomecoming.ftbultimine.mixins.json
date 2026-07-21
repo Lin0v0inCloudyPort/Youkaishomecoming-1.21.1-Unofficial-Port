@@ -1,0 +1,15 @@
+{
+	"required": false,
+	"priority": 2000,
+	"package": "dev.xkmc.youkaishomecoming.mixin.compat.ftbultimine",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"FTBUltimineCropHarvestingMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 0
+	},
+	"minVersion": "0.8"
+}

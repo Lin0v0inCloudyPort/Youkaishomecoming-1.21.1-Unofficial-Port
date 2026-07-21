@@ -44,6 +44,10 @@ public record CharDataHolder(CharacterData data, Player player, EntityType<?> ty
 		return v;
 	}
 
+	public boolean isNewFood(ItemStack food) {
+		return data.foodData.isNewFood(food);
+	}
+
 	public void gain(int v, int max) {
 		data.gainReputation(v, max);
 		sync();

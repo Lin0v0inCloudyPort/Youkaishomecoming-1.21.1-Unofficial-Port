@@ -32,11 +32,29 @@ public class GeneralEventHandlers {
 	@SubscribeEvent
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 		CombinedBlockSet.onRightClickBlock(event);
+		if (event.getLevel().isClientSide()) return;
+		if (event.getEntity() instanceof net.minecraft.world.entity.player.Player player
+				&& player.hasEffect(dev.xkmc.youkaishomecoming.init.registrate.GLEffects.UNCONSCIOUS)) {
+			var state = event.getLevel().getBlockState(event.getPos());
+			String className = state.getBlock().getClass().getName();
+			if (className.contains(".lootr.") || className.contains("Lootr")) {
+				dev.xkmc.youkaishomecoming.event.KoishiEventHandlers.removeKoishi(player);
+				return;
+			}
+			var be = event.getLevel().getBlockEntity(event.getPos());
+			if (be instanceof net.minecraft.world.RandomizableContainer rc && rc.getLootTable() != null) {
+				dev.xkmc.youkaishomecoming.event.KoishiEventHandlers.removeKoishi(player);
+			}
+		}
 	}
 
 	@SubscribeEvent
 	public static void onPhantomSpawn(PlayerSpawnPhantomsEvent event) {
 		if (event.getEntity().hasEffect(YHEffects.SOBER)) {
+			event.setResult(PlayerSpawnPhantomsEvent.Result.DENY);
+		}
+		if (dev.xkmc.youkaishomecoming.compat.curios.CuriosManager.hasHead(
+				event.getEntity(), dev.xkmc.youkaishomecoming.init.registrate.YHItems.CAMELLIA.get(), false)) {
 			event.setResult(PlayerSpawnPhantomsEvent.Result.DENY);
 		}
 	}

@@ -6,10 +6,10 @@
       "item": "youkaishomecoming:roe"
     },
     {
-      "item": "farmersdelight:cooked_rice"
+      "tag": "youkaishomecoming:cuisine/cooked_rice"
     },
     {
-      "item": "minecraft:dried_kelp"
+      "tag": "youkaishomecoming:cuisine/dried_kelp"
     }
   ],
   "result": {

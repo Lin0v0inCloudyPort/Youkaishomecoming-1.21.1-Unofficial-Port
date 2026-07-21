@@ -1,5 +1,5 @@
 {
-  "parent": "farmersdelight:block/pie",
+  "parent": "farmersdelight:block/template_pie",
   "textures": {
     "bottom": "youkaishomecoming:block/pie_bottom",
     "inner": "youkaishomecoming:block/red_velvet_inner",

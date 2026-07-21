@@ -21,6 +21,10 @@ public class FeedModuleData {
 	@SerialField
 	private final List<Item> history = new ArrayList<>();
 
+	public boolean isNewFood(ItemStack food) {
+		return !statistics.containsKey(food.getItem());
+	}
+
 	public double feed(ItemStack food) {
 		double ans = 0;
 		double val = 1;

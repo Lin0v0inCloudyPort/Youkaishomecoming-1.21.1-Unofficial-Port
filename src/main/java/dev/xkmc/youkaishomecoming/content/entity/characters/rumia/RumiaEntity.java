@@ -143,12 +143,18 @@ public class RumiaEntity extends SmartYoukaiEntity implements IYoukaiMerchant {
     }
 
     @Override
-    protected void actuallyHurt(DamageSource source, float amount) {
-        boolean isVoid = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
-        if (!isVoid && !isEx() && amount >= getMaxHealth()) {
-            //if (GLModConfig.SERVER.exRumiaConversion.get())
-            setEx(true);
+    public boolean hurt(DamageSource source, float amount) {
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !isEx()) {
+            if (amount >= getMaxHealth() && GLModConfig.SERVER.exRumiaConversion.get()) {
+                setEx(true);
+            }
+            amount = Math.min(getMaxHealth() / 5f, amount);
         }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof LivingEntity le) {
             state.onHurt(le, amount);
         }
@@ -172,7 +178,7 @@ public class RumiaEntity extends SmartYoukaiEntity implements IYoukaiMerchant {
 
     @Override
     public void die(DamageSource source) {
-        dropHairband = isEx() && source.is(DanmakuDamageTypes.DANMAKU_TYPE) && source.getEntity() instanceof Player;
+        dropHairband = isEx() && source.is(DanmakuDamageTypes.DANMAKU_TYPE);
         super.die(source);
     }
 

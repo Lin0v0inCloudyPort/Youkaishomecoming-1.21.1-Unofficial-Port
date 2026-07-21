@@ -6,10 +6,10 @@
       "item": "minecraft:sugar"
     },
     "B": {
-      "item": "minecraft:milk_bucket"
+      "tag": "c:foods/milk"
     },
     "C": {
-      "item": "minecraft:glass_bottle"
+      "item": "youkaishomecoming:blood_bottle"
     },
     "D": {
       "tag": "youkaishomecoming:raw_flesh"

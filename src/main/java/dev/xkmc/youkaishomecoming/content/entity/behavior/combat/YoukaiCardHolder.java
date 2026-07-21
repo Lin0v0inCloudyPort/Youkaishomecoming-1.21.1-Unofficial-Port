@@ -111,6 +111,7 @@ public record YoukaiCardHolder(YoukaiEntity self) implements CardHolder {
     @Override
     public void shoot(SimplifiedProjectile danmaku) {
         level().addFreshEntity(danmaku);
+        self.trackDanmaku(danmaku);
     }
 
 }

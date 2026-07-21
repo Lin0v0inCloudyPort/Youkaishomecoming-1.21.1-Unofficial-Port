@@ -137,50 +137,10 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:cooked_mandrake_root": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:cooked_mandrake_root"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:cornflower_tea": {
       "conditions": {
         "item": {
           "items": "youkaishomecoming:cornflower_tea"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:crab": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:crab"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:crab_meat": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:crab_meat"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:crab_roe": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:crab_roe"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:cucumber_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:cucumber_slice"
         }
       },
       "trigger": "youkaishomecoming:feed_reimu"
@@ -281,42 +241,10 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:grilled_boarchop": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:grilled_boarchop"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:grilled_boarchop_bits": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:grilled_boarchop_bits"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:grilled_eel_over_rice": {
       "conditions": {
         "item": {
           "items": "youkaishomecoming:grilled_eel_over_rice"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:grilled_venison": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:grilled_venison"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:grilled_venison_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:grilled_venison_slice"
         }
       },
       "trigger": "youkaishomecoming:feed_reimu"
@@ -577,14 +505,6 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:otoro": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:otoro"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:otoro_nigiri": {
       "conditions": {
         "item": {
@@ -657,70 +577,6 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:raw_boarchop": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_boarchop"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_boarchop_bits": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_boarchop_bits"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_lamprey": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_lamprey"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_lamprey_fillet": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_lamprey_fillet"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_tuna": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_tuna"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_tuna_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_tuna_slice"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_venison": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_venison"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:raw_venison_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:raw_venison_slice"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:red_grape_juice": {
       "conditions": {
         "item": {
@@ -741,30 +597,6 @@
       "conditions": {
         "item": {
           "items": "youkaishomecoming:rice_powder_pork"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:roasted_lamprey": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:roasted_lamprey"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:roasted_lamprey_fillet": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:roasted_lamprey_fillet"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:roe": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:roe"
         }
       },
       "trigger": "youkaishomecoming:feed_reimu"
@@ -841,22 +673,6 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:seared_tuna": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:seared_tuna"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:seared_tuna_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:seared_tuna_slice"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:sekibankiyaki": {
       "conditions": {
         "item": {
@@ -913,14 +729,6 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:steamed_crab": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:steamed_crab"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:steamed_egg_in_bamboo": {
       "conditions": {
         "item": {
@@ -961,14 +769,6 @@
       },
       "trigger": "youkaishomecoming:feed_reimu"
     },
-    "youkaishomecoming:tamagoyaki_slice": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:tamagoyaki_slice"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
     "youkaishomecoming:tea_mocha": {
       "conditions": {
         "item": {
@@ -997,14 +797,6 @@
       "conditions": {
         "item": {
           "items": "youkaishomecoming:tobiko_gunkan"
-        }
-      },
-      "trigger": "youkaishomecoming:feed_reimu"
-    },
-    "youkaishomecoming:tofu": {
-      "conditions": {
-        "item": {
-          "items": "youkaishomecoming:tofu"
         }
       },
       "trigger": "youkaishomecoming:feed_reimu"
@@ -1272,79 +1064,7 @@
       "youkaishomecoming:van_allen"
     ],
     [
-      "youkaishomecoming:raw_lamprey"
-    ],
-    [
-      "youkaishomecoming:roasted_lamprey"
-    ],
-    [
-      "youkaishomecoming:raw_lamprey_fillet"
-    ],
-    [
-      "youkaishomecoming:roasted_lamprey_fillet"
-    ],
-    [
-      "youkaishomecoming:raw_tuna"
-    ],
-    [
-      "youkaishomecoming:seared_tuna"
-    ],
-    [
-      "youkaishomecoming:raw_tuna_slice"
-    ],
-    [
-      "youkaishomecoming:seared_tuna_slice"
-    ],
-    [
-      "youkaishomecoming:otoro"
-    ],
-    [
-      "youkaishomecoming:crab"
-    ],
-    [
-      "youkaishomecoming:steamed_crab"
-    ],
-    [
-      "youkaishomecoming:crab_meat"
-    ],
-    [
-      "youkaishomecoming:crab_roe"
-    ],
-    [
-      "youkaishomecoming:raw_venison"
-    ],
-    [
-      "youkaishomecoming:grilled_venison"
-    ],
-    [
-      "youkaishomecoming:raw_venison_slice"
-    ],
-    [
-      "youkaishomecoming:grilled_venison_slice"
-    ],
-    [
-      "youkaishomecoming:raw_boarchop"
-    ],
-    [
-      "youkaishomecoming:grilled_boarchop"
-    ],
-    [
-      "youkaishomecoming:raw_boarchop_bits"
-    ],
-    [
-      "youkaishomecoming:grilled_boarchop_bits"
-    ],
-    [
-      "youkaishomecoming:cooked_mandrake_root"
-    ],
-    [
-      "youkaishomecoming:roe"
-    ],
-    [
       "youkaishomecoming:butter"
-    ],
-    [
-      "youkaishomecoming:tofu"
     ],
     [
       "youkaishomecoming:oily_bean_curd"
@@ -1356,13 +1076,7 @@
       "youkaishomecoming:tamagoyaki"
     ],
     [
-      "youkaishomecoming:tamagoyaki_slice"
-    ],
-    [
       "youkaishomecoming:nattou"
-    ],
-    [
-      "youkaishomecoming:cucumber_slice"
     ],
     [
       "youkaishomecoming:raisin"

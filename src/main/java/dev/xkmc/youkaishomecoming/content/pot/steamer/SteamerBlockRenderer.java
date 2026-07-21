@@ -7,16 +7,24 @@ import dev.xkmc.youkaishomecoming.content.item.food.FoodBlockItem;
 import dev.xkmc.youkaishomecoming.util.FluidRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 public class SteamerBlockRenderer implements BlockEntityRenderer<SteamerBlockEntity> {
+
+	private static final RandomSource RANDOM = RandomSource.create(42);
 
 	private final ItemRenderer itemRenderer;
 
@@ -36,6 +44,7 @@ public class SteamerBlockRenderer implements BlockEntityRenderer<SteamerBlockEnt
 			pose.pushPose();
 			BlockState state = item.getBlock().defaultBlockState();
 			state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, state.getValue(BlockStateProperties.HORIZONTAL_FACING));
+			BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(state);
 			pose.translate(.5f, (info.height() * 4 - 3) / 16f, .5f);
 			if (item.getBlock() instanceof ISteamerContentBlock block) {
 				float width = 16 - block.clearance() * 2;
@@ -43,7 +52,13 @@ public class SteamerBlockRenderer implements BlockEntityRenderer<SteamerBlockEnt
 				pose.scale(s, s, s);
 			}
 			pose.translate(-.5f, 0, -.5f);
-			this.itemRenderer.renderStatic(rack.list[0].stack, ItemDisplayContext.FIXED, light, overlay, pose, buffer, be.getLevel(), (int) be.getBlockPos().asLong());
+			ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+			PoseStack.Pose mat = pose.last();
+			RANDOM.setSeed(42);
+			for (RenderType rt : model.getRenderTypes(state, RANDOM, ModelData.EMPTY)) {
+				renderer.renderModel(mat, buffer.getBuffer(ClientHooks.getEntityRenderType(rt, false)),
+						state, model, 1F, 1F, 1F, light, overlay, ModelData.EMPTY, rt);
+			}
 			pose.popPose();
 			return;
 		}

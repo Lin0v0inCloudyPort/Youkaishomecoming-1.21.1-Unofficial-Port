@@ -55,6 +55,14 @@ public class YHGeneralEvents {
 		if (e.hasEffect(YHEffects.REFRESHING) && e.isOnFire()) {
 			e.clearFire();
 		}
+		if (e.hasEffect(YHEffects.SOBER)) {
+			if (e.hasEffect(YHEffects.YOUKAIFYING)) {
+				e.removeEffect(YHEffects.YOUKAIFYING);
+			}
+			if (e.hasEffect(YHEffects.YOUKAIFIED)) {
+				e.removeEffect(YHEffects.YOUKAIFIED);
+			}
+		}
 	}
 
 	@SubscribeEvent

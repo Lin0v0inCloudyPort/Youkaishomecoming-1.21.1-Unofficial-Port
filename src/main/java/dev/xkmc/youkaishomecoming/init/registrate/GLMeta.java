@@ -1,6 +1,7 @@
 package dev.xkmc.youkaishomecoming.init.registrate;
 
 import dev.xkmc.youkaishomecoming.content.attachment.character.CharacterAttachment;
+import dev.xkmc.youkaishomecoming.content.attachment.graze.GrazeCapability;
 import dev.xkmc.youkaishomecoming.content.attachment.datamap.BedData;
 import dev.xkmc.youkaishomecoming.content.attachment.datamap.CharacterConfig;
 import dev.xkmc.youkaishomecoming.content.attachment.datamap.StructureConfig;
@@ -34,6 +35,8 @@ public class GLMeta {
             StructureAttachment.class, StructureAttachment::new, LevelChunk.class, e -> true);
     public static final AttVal.PlayerVal<KoishiAttackCapability> KOISHI_ATTACK = ATT.player("koishi_attack",
             KoishiAttackCapability.class, KoishiAttackCapability::new, PlayerCapabilityNetworkHandler::new);
+    public static final AttVal.PlayerVal<GrazeCapability> GRAZE = ATT.player("graze",
+            GrazeCapability.class, GrazeCapability::new, PlayerCapabilityNetworkHandler::new);
     public static final AttVal.CapVal<Frog, FrogGodCapability> FROG_GOD = ATT.entity("frog_god",
             FrogGodCapability.class, FrogGodCapability::new, Frog.class, e -> true);
 

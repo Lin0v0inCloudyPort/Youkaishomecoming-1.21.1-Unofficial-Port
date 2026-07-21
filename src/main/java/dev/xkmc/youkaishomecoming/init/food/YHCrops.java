@@ -59,6 +59,7 @@ public enum YHCrops {
 	private final BlockEntry<? extends BushBlock> WILD;
 	public final ItemEntry<ItemNameBlockItem> seed;
 	public final ItemEntry<? extends Item> fruits;
+	public dev.xkmc.youkaishomecoming.content.block.plant.grape.GrapeVineSet vineSet;
 
 	public final ResourceKey<ConfiguredFeature<?, ?>> configKey;
 	public final ResourceKey<PlacedFeature> placementKey;
@@ -74,6 +75,10 @@ public enum YHCrops {
 
 		PLANT = type.plant(name, this);
 		WILD = type.wild(name, this);
+
+		if (type == PlantType.GRAPE) {
+			vineSet = new dev.xkmc.youkaishomecoming.content.block.plant.grape.GrapeVineSet(this);
+		}
 
 		seed = YHItems.seed(seedName, p -> new ItemNameBlockItem(getPlant(), p));
 

@@ -9,6 +9,8 @@ import net.minecraft.sounds.SoundEvent;
 public class GLSounds {
 
 	public static final SimpleEntry<SoundEvent> KOISHI_RING = reg("koishi_ring");
+	public static final SimpleEntry<SoundEvent> GRAZE = reg("graze");
+	public static final SimpleEntry<SoundEvent> MISS = reg("miss");
 
 	private static SimpleEntry<SoundEvent> reg(String id) {
 		ResourceLocation rl = GensokyoLegacy.loc(id);

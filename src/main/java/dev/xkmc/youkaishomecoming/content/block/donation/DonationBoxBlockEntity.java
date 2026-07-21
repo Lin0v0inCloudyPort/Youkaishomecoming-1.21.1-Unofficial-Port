@@ -10,6 +10,7 @@ import dev.xkmc.youkaishomecoming.content.client.debug.BlockInfoToClient;
 import dev.xkmc.youkaishomecoming.content.entity.characters.maiden.MaidenEntity;
 import dev.xkmc.youkaishomecoming.event.ReimuEventHandlers;
 import dev.xkmc.youkaishomecoming.init.data.GLLang;
+import dev.xkmc.youkaishomecoming.init.data.GLModConfig;
 import dev.xkmc.youkaishomecoming.init.registrate.GLEntities;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
@@ -32,8 +33,6 @@ import java.util.UUID;
 
 @SerialClass
 public class DonationBoxBlockEntity extends LocatedBlockEntity implements IDebugInfoBlockEntity {
-
-	private static final int SUMMON_COST = 8;
 
 	@SerialField
 	private final HashMap<UUID, Integer> donationMap = new HashMap<>();
@@ -71,14 +70,16 @@ public class DonationBoxBlockEntity extends LocatedBlockEntity implements IDebug
 		}
 
 		// summoning: each emerald/gold_ingot counts as 1 donation unit regardless of reputation
-		if (isSummonItem && level instanceof ServerLevel sl && bed.type() == GLEntities.REIMU.get()) {
+		if (isSummonItem && level instanceof ServerLevel sl && bed.type() == GLEntities.REIMU.get()
+				&& GLModConfig.SERVER.reimuSummonMoney.get()) {
 			if (consumed == 0) consumed = 1;
 			UUID uuid = player.getUUID();
 			int donated = donationMap.getOrDefault(uuid, 0) + 1;
 			int rewarded = rewardedMap.getOrDefault(uuid, 0);
 			donationMap.put(uuid, donated);
-			if (donated - rewarded >= SUMMON_COST) {
-				rewardedMap.put(uuid, rewarded + SUMMON_COST);
+			int summonCost = GLModConfig.SERVER.reimuSummonCost.get();
+			if (donated - rewarded >= summonCost) {
+				rewardedMap.put(uuid, rewarded + summonCost);
 				trySummonReimu(sl, player);
 			}
 			setChanged();

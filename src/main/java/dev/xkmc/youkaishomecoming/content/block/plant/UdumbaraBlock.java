@@ -85,14 +85,24 @@ public class UdumbaraBlock extends YHCropBlock {
 
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		level.setBlock(pos, state.setValue(AGE, getMaxAge() - 1), 2);
+		if (state.is(this) && state.getValue(AGE) == getMaxAge())
+			level.setBlock(pos, state.setValue(AGE, getMaxAge() - 1), 2);
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (state.getValue(AGE) < getMaxAge()) {
-			return InteractionResult.PASS;
-		} else {
+		if (state.getValue(AGE) == getMaxAge() - 1) {
+			popResource(level, pos, getBaseSeedId().asItem().getDefaultInstance());
+			level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS,
+					1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+			BlockState next = state.setValue(AGE, 2);
+			level.setBlock(pos, next, 2);
+			level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, next));
+			if (player instanceof net.minecraft.server.level.ServerPlayer sp)
+				dev.xkmc.youkaishomecoming.init.registrate.YHCriteriaTriggers.UDUMBARA_LEAVES.get().trigger(sp);
+			return InteractionResult.sidedSuccess(level.isClientSide);
+		}
+		if (state.getValue(AGE) == getMaxAge()) {
 			popResource(level, pos, fruit.get().getDefaultInstance());
 			level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS,
 					1.0F, 0.8F + level.random.nextFloat() * 0.4F);
@@ -101,6 +111,7 @@ public class UdumbaraBlock extends YHCropBlock {
 			level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, next));
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
+		return InteractionResult.PASS;
 	}
 
 	@Override

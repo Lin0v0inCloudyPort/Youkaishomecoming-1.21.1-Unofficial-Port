@@ -77,6 +77,10 @@ public class GrapeCropBlock extends DoubleRopeCropBlock {
 		return crop.getFruits();
 	}
 
+	public ItemLike getFruitItem() {
+		return getFruit();
+	}
+
 	@Override
 	protected IntegerProperty getAgeProperty() {
 		return AGE;
@@ -129,9 +133,11 @@ public class GrapeCropBlock extends DoubleRopeCropBlock {
 					}
 					var up = level.getBlockState(pos.above());
 					var empty = up.getValue(ROPELOGGED) ? getRopeBlock() : Blocks.AIR.defaultBlockState();
-					// TODO: Add GrapeVineSet support
-					// level.setBlock(pos, crop.set.trunk.getDefaultState(), 2);
-					level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+					if (crop.vineSet != null) {
+						level.setBlock(pos, crop.vineSet.trunk.get().defaultBlockState(), 2);
+					} else {
+						level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+					}
 					level.setBlock(pos.above(), empty, 35);
 					var down = level.getBlockState(pos.below());
 					if (down.is(Blocks.FARMLAND)) {
@@ -142,10 +148,9 @@ public class GrapeCropBlock extends DoubleRopeCropBlock {
 					if (!player.getAbilities().instabuild) {
 						stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
 					}
-					// TODO: Add GRAPE_CUT trigger
-					// if (player instanceof ServerPlayer sp) {
-					// 	YHCriteriaTriggers.GRAPE_CUT.get().trigger(sp);
-					// }
+					if (player instanceof ServerPlayer sp) {
+						YHCriteriaTriggers.GRAPE_CUT.get().trigger(sp);
+					}
 				}
 				return ItemInteractionResult.SUCCESS;
 			}

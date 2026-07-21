@@ -39,7 +39,7 @@
           "block": "youkaishomecoming:tea",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "age": "6"
+            "age": "8"
           }
         }
       ],

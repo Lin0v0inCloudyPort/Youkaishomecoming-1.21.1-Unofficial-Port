@@ -43,7 +43,7 @@ public abstract class DoubleCropBlock extends CropBlock {
 		if (pLevel.getRawBrightness(pPos, 0) >= 9) {
 			int i = this.getAge(pState);
 			if (i < this.getMaxAge()) {
-				float f = getGrowthSpeed(pState, pLevel, pPos);
+				float f = modifySpeed(pState, getGrowthSpeed(pState, pLevel, pPos));
 				if (CommonHooks.canCropGrow(pLevel, pPos, pState, pRandom.nextInt((int) (25.0F / f) + 1) == 0)) {
 					setGrowth(pLevel, pPos, i + 1, 2);
 					CommonHooks.fireCropGrowPost(pLevel, pPos, pState);
@@ -51,6 +51,10 @@ public abstract class DoubleCropBlock extends CropBlock {
 			}
 		}
 
+	}
+
+	protected float modifySpeed(BlockState state, float val) {
+		return val;
 	}
 
 	public void growCrops(Level pLevel, BlockPos pPos, BlockState pState) {

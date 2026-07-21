@@ -56,11 +56,10 @@ public class CucumberCropBlock extends RootedClimbingCropBlock {
 	@Override
 	protected void pickup(BlockState state, Level level, BlockPos pos, Player player) {
 		super.pickup(state, level, pos, player);
-		// TODO: Add CUCUMBER trigger
-		// if (player instanceof ServerPlayer sp &&
-		// 		level.getBlockState(pos.below()).is(this) &&
-		// 		level.getBlockState(pos.below().below()).is(this)) {
-		// 	YHCriteriaTriggers.CUCUMBER.get().trigger(sp);
-		// }
+		if (player instanceof ServerPlayer sp &&
+				level.getBlockState(pos.below()).is(this) &&
+				level.getBlockState(pos.below().below()).is(this)) {
+			YHCriteriaTriggers.CUCUMBER.get().trigger(sp);
+		}
 	}
 }

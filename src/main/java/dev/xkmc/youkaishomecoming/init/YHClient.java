@@ -25,6 +25,8 @@ public class YHClient {
 	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.CROSSHAIR, GensokyoLegacy.loc("info_tile"), new TileInfoDisplay());
 		event.registerAbove(VanillaGuiLayers.CROSSHAIR, GensokyoLegacy.loc("cuisine_hint"), new HintOverlay());
+		event.registerAbove(VanillaGuiLayers.CROSSHAIR, GensokyoLegacy.loc("power_info"),
+				new dev.xkmc.youkaishomecoming.content.client.PowerInfoOverlay());
 	}
 
 	@SubscribeEvent

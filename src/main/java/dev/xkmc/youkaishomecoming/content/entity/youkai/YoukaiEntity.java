@@ -87,6 +87,15 @@ public abstract class YoukaiEntity extends DamageClampEntity implements SpellCir
 	public final YoukaiCombatManager combatManager = createCombatManager();
 	public final YoukaiNavigationControl navCtrl = new YoukaiNavigationControl(this);
 
+	/**
+	 * Live danmaku fired by this youkai. The original mod kept an explicit list and erased every
+	 * entry regardless of distance; GL had switched to a bounded world query, which missed bullets
+	 * that had travelled past the search box (homing/intercept waves spread far from the youkai),
+	 * so a cleared screen would "regrow" as those un-erased bullets flew back at the player. We
+	 * track everything we shoot and prune dead entries each server tick.
+	 */
+	private final java.util.LinkedList<dev.xkmc.fastprojectileapi.entity.SimplifiedProjectile> firedDanmaku = new java.util.LinkedList<>();
+
 	public YoukaiEntity(EntityType<? extends YoukaiEntity> pEntityType, Level pLevel) {
 		this(pEntityType, pLevel, 10);
 	}
@@ -212,6 +221,7 @@ public abstract class YoukaiEntity extends DamageClampEntity implements SpellCir
 		for (var e : modules) {
 			e.tickServer();
 		}
+		firedDanmaku.removeIf(net.minecraft.world.entity.Entity::isRemoved);
 		super.customServerAiStep();
 	}
 
@@ -452,6 +462,65 @@ public abstract class YoukaiEntity extends DamageClampEntity implements SpellCir
 		danmaku.setItem(DanmakuItems.Bullet.CIRCLE.get(color).asStack());
 		danmaku.setup(dmg, life, true, true, vec);
 		level().addFreshEntity(danmaku);
+		trackDanmaku(danmaku);
+	}
+
+	/**
+	 * Records a danmaku this youkai just spawned so {@link #eraseAllDanmaku} can later clear it
+	 * regardless of how far it has travelled. Called from every shoot path (here and the card holder).
+	 */
+	public void trackDanmaku(dev.xkmc.fastprojectileapi.entity.SimplifiedProjectile proj) {
+		if (level().isClientSide()) return;
+		firedDanmaku.add(proj);
+	}
+
+	/**
+	 * Erases all danmaku owned by this youkai. GL danmaku are real world entities, so we keep an
+	 * explicit list of everything fired (see {@link #firedDanmaku}) and erase every live entry —
+	 * matching the original mod. A distance-bounded world query would miss bullets that have flown
+	 * out of range, letting a cleared screen visibly regrow.
+	 */
+	public void eraseAllDanmaku(@Nullable Player player) {
+		if (level().isClientSide()) return;
+		var itr = firedDanmaku.iterator();
+		while (itr.hasNext()) {
+			var proj = itr.next();
+			if (proj.isRemoved()) {
+				itr.remove();
+				continue;
+			}
+			if (player == null) proj.markErased(true);
+			else proj.erase(player);
+		}
+		firedDanmaku.clear();
+	}
+
+	public void resetTarget(Player target) {
+		targets.removePlayer(target.getUUID());
+		setTarget(null);
+		setLastHurtByMob(null);
+	}
+
+	@Override
+	public void danmakuHitTarget(IDanmakuEntity self, DamageSource source, LivingEntity target) {
+		if (target instanceof Player player) {
+			var graze = dev.xkmc.youkaishomecoming.init.registrate.GLMeta.GRAZE.type().getOrCreate(player);
+			var type = graze.performErase(player, this);
+			if (type.erase()) {
+				eraseAllDanmaku(player);
+			}
+			if (type.skipDamage()) {
+				return;
+			}
+		}
+		float hp = target.getHealth();
+		boolean immune = !target.hurt(source, self.damage(target));
+		float ahp = target.getHealth();
+		if (ahp >= hp && ahp > 0) immune = true;
+		onDanmakuHit(target, self);
+		if (immune) {
+			onDanmakuImmune(target, self, source);
+		}
 	}
 
 	// misc

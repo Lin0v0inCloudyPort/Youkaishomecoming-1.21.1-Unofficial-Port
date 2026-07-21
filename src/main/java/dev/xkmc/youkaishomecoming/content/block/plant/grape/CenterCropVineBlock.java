@@ -152,15 +152,14 @@ public abstract class CenterCropVineBlock extends BaseCropVineBlock {
 
 	@Nullable
 	protected BlockPos getTrunk(BlockState state, BlockGetter level, BlockPos pos) {
-		pos = pos.below();
-		var low = level.getBlockState(pos);
-		if (low.is(getTrunk()))
-			return pos;
-		if (low.is(this)) {
-			pos = pos.below();
-			low = level.getBlockState(pos);
+		BlockPos check = pos;
+		for (int i = 0; i < 5; i++) {
+			check = check.below();
+			var low = level.getBlockState(check);
 			if (low.is(getTrunk()))
-				return pos;
+				return check;
+			if (!low.is(this))
+				return null;
 		}
 		return null;
 	}

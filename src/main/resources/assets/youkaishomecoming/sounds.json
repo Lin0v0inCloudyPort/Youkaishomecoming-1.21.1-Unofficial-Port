@@ -8,6 +8,24 @@
 	],
 	"subtitle": "youkaishomecoming.subtitle.koishi_ring"
   },
+  "graze": {
+	"sounds": [
+	  {
+		"type": "file",
+		"name": "youkaishomecoming:graze"
+	  }
+	],
+	"subtitle": "youkaishomecoming.subtitle.graze"
+  },
+  "miss": {
+	"sounds": [
+	  {
+		"type": "file",
+		"name": "youkaishomecoming:miss"
+	  }
+	],
+	"subtitle": "youkaishomecoming.subtitle.miss"
+  },
   "deer_ambient": {
 	"sounds": [
 	  { "type": "file", "name": "youkaishomecoming:deer/0" },

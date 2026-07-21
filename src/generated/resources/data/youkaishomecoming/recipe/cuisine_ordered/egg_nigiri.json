@@ -6,7 +6,7 @@
       "item": "youkaishomecoming:tamagoyaki"
     },
     {
-      "item": "minecraft:dried_kelp"
+      "tag": "youkaishomecoming:cuisine/dried_kelp"
     }
   ],
   "result": {

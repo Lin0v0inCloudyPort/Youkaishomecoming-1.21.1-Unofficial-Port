@@ -58,8 +58,9 @@ public class FeedModule extends AbstractYoukaiModule {
 	public void onFeed(ItemStack food, FoodProperties prop, Player player, int favor) {
 		var data = self.getData(player);
 		if (data.isEmpty()) return;
+		boolean isNew = data.get().isNewFood(food);
 		int heart = data.get().feed(food, favor);
-		if (heart > 0) {
+		if (heart > 0 && isNew && ReimuFoodChecker.isLoveFood(food.getItem())) {
 			self.level().broadcastEntityEvent(self, EntityEvent.IN_LOVE_HEARTS);
 		}
 	}

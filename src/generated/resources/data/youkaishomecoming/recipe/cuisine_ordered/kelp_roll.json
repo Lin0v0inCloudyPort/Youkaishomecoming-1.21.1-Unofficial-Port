@@ -3,7 +3,7 @@
   "base": "youkaishomecoming:hosomaki",
   "input": [
     {
-      "item": "minecraft:carrot"
+      "tag": "c:vegetables/carrot"
     }
   ],
   "result": {

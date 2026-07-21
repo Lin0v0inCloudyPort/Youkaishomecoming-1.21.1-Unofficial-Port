@@ -6,7 +6,7 @@
       "item": "youkaishomecoming:soy_sauce_bottle"
     },
     {
-      "item": "minecraft:beetroot"
+      "tag": "c:vegetables/beetroot"
     }
   ],
   "result": {

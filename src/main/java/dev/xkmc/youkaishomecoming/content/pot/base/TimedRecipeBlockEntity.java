@@ -112,6 +112,7 @@ public abstract class TimedRecipeBlockEntity<
 				totalTime = 0;
 				recipeId = null;
 				recipe = null;
+				sync();
 			}
 		}
 	}
